@@ -11,39 +11,78 @@ import AutomationFlow from "./components/AutomationFlow";
 import Metrics from "./components/Metrics";
 import FinalCTA from "./components/FinalCTA";
 import Footer from "./components/Footer";
-
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
+import ChatWidget from "./components/ChatWidget";
+import BookingModal from "./components/BookingModal";
+import VideoModal from "./components/VideoModal";
+import { BookingProvider } from "./context/BookingContext";
+import { VideoProvider } from "./context/VideoContext";
 
 export default function App() {
   useEffect(() => {
-    const lenis = new Lenis();
+    const lenis = new Lenis({
+      duration: 1.4,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+      infinite: false,
+    });
+
+    let rafId: number;
 
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
+
+    // Make anchor links work with Lenis
+    function handleAnchorClick(e: MouseEvent) {
+      const target = e.target as HTMLElement;
+      const anchor = target.closest("a[href^='#']") as HTMLAnchorElement | null;
+      if (!anchor) return;
+      const id = anchor.getAttribute("href")?.slice(1);
+      if (!id) return;
+      const el = document.getElementById(id);
+      if (!el) return;
+      e.preventDefault();
+      lenis.scrollTo(el, { offset: -80, duration: 1.6 });
+    }
+
+    document.addEventListener("click", handleAnchorClick);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+      document.removeEventListener("click", handleAnchorClick);
+    };
   }, []);
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
-      <main>
-        <Hero />
-        <TrustLogos />
-        <UseCases />
-        <LiveOutput />
-        <HowItWorks />
-        <AgentSystem />
-        <AutomationFlow />
-        <Metrics />
-        <FinalCTA />
-      </main>
-      <Footer />
-    </div>
+    <BookingProvider>
+      <VideoProvider>
+        <div className="min-h-screen bg-white">
+          <Navbar />
+          <main>
+            <Hero />
+            <TrustLogos />
+            <UseCases id="use-cases" />
+            <LiveOutput />
+            <HowItWorks id="workflows" />
+            <AgentSystem id="agents" />
+            <AutomationFlow />
+            <Metrics />
+            <FinalCTA />
+          </main>
+          <Footer />
+          <ChatWidget />
+          <BookingModal />
+          <VideoModal />
+        </div>
+      </VideoProvider>
+    </BookingProvider>
   );
 }

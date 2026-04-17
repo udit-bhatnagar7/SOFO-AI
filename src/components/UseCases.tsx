@@ -8,6 +8,7 @@ const cards = [
     icon: Camera,
     color: "blue",
     cta: "Start Listing",
+    href: "#output",
   },
   {
     title: "Handle Paperwork",
@@ -15,6 +16,7 @@ const cards = [
     icon: FileText,
     color: "purple",
     cta: "Upload PDF",
+    href: "#output",
   },
   {
     title: "Market Listings",
@@ -22,21 +24,24 @@ const cards = [
     icon: Share2,
     color: "teal",
     cta: "Generate Content",
+    href: "#output",
   },
 ];
 
-export default function UseCases() {
+export default function UseCases({ id }: { id?: string }) {
   return (
-    <section className="py-24 px-6 bg-muted/30">
-      <div className="max-w-7xl mx-auto space-y-16">
-        <div className="max-w-2xl">
-          <h2 className="text-4xl font-display font-bold tracking-tight text-ink leading-tight">
-            Intelligent automation for <br />
-            every stage of the deal.
+    <section id={id} className="py-16 sm:py-24 px-4 sm:px-6 bg-muted/30">
+      <div className="max-w-7xl mx-auto space-y-12 sm:space-y-16">
+        <div className="text-center">
+          <h2 className="text-3xl sm:text-4xl font-display font-bold tracking-tight leading-tight">
+            <span className="text-ink">Intelligent automation for</span>{" "}
+            <br className="hidden sm:block" />
+            <span className="text-ink-soft/50">every stage</span>{" "}
+            <span className="text-ink">of the deal.</span>
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
           {cards.map((card, idx) => (
             <motion.div
               key={idx}
@@ -51,19 +56,19 @@ export default function UseCases() {
                 bounce: 0.35 
               }}
               whileHover={{ y: -10 }}
-              className="bg-surface-elevated p-10 rounded-3xl border border-border shadow-soft hover:shadow-elevated hover:shadow-ink/5 transition-all group relative overflow-hidden"
+              className="bg-surface-elevated p-7 sm:p-10 rounded-3xl border border-border shadow-soft hover:shadow-elevated hover:shadow-ink/5 transition-all group relative overflow-hidden"
             >
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-8 transition-transform group-hover:scale-110 shadow-soft border ${
+              <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center mb-6 sm:mb-8 transition-transform group-hover:scale-110 shadow-soft border ${
                 card.color === 'blue' ? 'bg-blue-50 text-brand-blue border-brand-blue/10' : 
                 card.color === 'purple' ? 'bg-purple-50 text-brand-purple border-brand-purple/10' : 
                 'bg-teal-50 text-brand-teal border-brand-teal/10'
               }`}>
-                <card.icon className="w-7 h-7" />
+                <card.icon className="w-6 h-6 sm:w-7 sm:h-7" />
               </div>
 
-              <h3 className="text-2xl font-display font-bold text-ink mb-4">{card.title}</h3>
+              <h3 className="text-xl sm:text-2xl font-display font-bold text-ink mb-4">{card.title}</h3>
               
-              <ul className="space-y-3 mb-10 min-h-[140px]">
+              <ul className="space-y-3 mb-8 sm:mb-10 min-h-[120px] sm:min-h-[140px]">
                 {card.items.map((item, i) => (
                   <li key={i} className="flex items-center gap-3 text-ink-soft/80 text-[13px] font-medium font-sans">
                     <div className="w-1 h-1 rounded-full bg-border" />
@@ -72,10 +77,13 @@ export default function UseCases() {
                 ))}
               </ul>
 
-              <button className="flex items-center justify-between w-full py-4 px-6 rounded-2xl bg-ink text-white text-sm font-bold hover:opacity-95 transition-opacity shadow-soft shadow-ink/10">
+              <a
+                href={card.href}
+                className="flex items-center justify-between w-full py-3.5 sm:py-4 px-5 sm:px-6 rounded-2xl bg-ink text-white text-sm font-bold hover:opacity-95 transition-opacity shadow-soft shadow-ink/10"
+              >
                 {card.cta}
                 <ArrowUpRight className="w-4 h-4 opacity-50" />
-              </button>
+              </a>
 
               {/* Subtle background glow on hover */}
               <div className={`absolute -right-20 -bottom-20 w-40 h-40 rounded-full blur-3xl opacity-0 group-hover:opacity-10 transition-opacity ${

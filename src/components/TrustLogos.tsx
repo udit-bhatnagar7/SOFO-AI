@@ -6,17 +6,17 @@ const partners = [
 
 export default function TrustLogos() {
   return (
-    <section className="py-12 border-b border-border/40 bg-white/50 backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto px-6">
-        <p className="text-center text-[10px] font-black uppercase tracking-[0.3em] text-ink-soft mb-10">
+    <section className="py-10 sm:py-12 border-b border-border/40 bg-white/50 backdrop-blur-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <p className="text-center text-[10px] font-black uppercase tracking-[0.3em] text-ink-soft mb-8 sm:mb-10">
           Powering agents at the world's leading firms
         </p>
-        <div className="flex flex-wrap justify-center items-center gap-x-16 gap-y-10 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
+        <div className="flex flex-wrap justify-center items-center gap-x-8 sm:gap-x-16 gap-y-6 sm:gap-y-10 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
           {partners.map((partner) => (
             <motion.div
               key={partner}
               whileHover={{ scale: 1.05, opacity: 1 }}
-              className="text-xl font-display font-bold tracking-tighter text-ink"
+              className="text-lg sm:text-xl font-display font-bold tracking-tighter text-ink"
             >
               {partner}
             </motion.div>

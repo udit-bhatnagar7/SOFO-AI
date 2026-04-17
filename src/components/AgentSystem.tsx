@@ -1,235 +1,221 @@
 import { motion } from "motion/react";
-import { User, ShieldCheck, Zap } from "lucide-react";
+import { User, ShieldCheck, Zap, ArrowRight, FileText, BarChart3, Megaphone } from "lucide-react";
 
 const agents = [
   {
+    id: "01",
     name: "Ria",
-    desc: "Your dedicated Listing Manager. Ria handles the heavy lifting from raw property data to polished listings.",
+    role: "Listing Manager",
+    desc: "Extracts data from raw documents, auto-fills MLS fields, and generates polished listing descriptions in seconds.",
     icon: User,
+    color: "blue",
+    stat: "12 forms",
+    statLabel: "auto-filled",
+    tasks: ["Parse listing agreement", "Extract seller data", "Fill MLS fields", "Generate description"],
   },
   {
+    id: "02",
     name: "Transaction Agent",
-    desc: "Processes documents and fills all required forms with surgical precision.",
+    role: "Document Processor",
+    desc: "Processes disclosures, IABS forms, and closing stacks with surgical precision and zero manual input.",
     icon: ShieldCheck,
+    color: "purple",
+    stat: "100%",
+    statLabel: "compliance",
+    tasks: ["Seller disclosure", "IABS auto-fill", "Closing stack", "Compliance check"],
   },
   {
+    id: "03",
     name: "Marketing Agent",
-    desc: "Generates and distributes high-converting content across all platforms.",
-    icon: Zap,
+    role: "Content Distributor",
+    desc: "Generates and distributes high-converting campaigns across Instagram, Facebook, LinkedIn, and email.",
+    icon: Megaphone,
+    color: "teal",
+    stat: "12.4k+",
+    statLabel: "avg. reach",
+    tasks: ["Social captions", "Ad creatives", "Email campaigns", "A/B testing"],
   },
 ];
 
-export default function AgentSystem() {
-  return (
-    <section className="py-32 px-6 bg-ink text-white overflow-hidden relative">
-      <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-white/10 rounded-full" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-white/10 rounded-full" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-white/10 rounded-full" />
-      </div>
+const colorMap = {
+  blue:   { bg: "bg-brand-blue/10",   text: "text-brand-blue",   border: "border-brand-blue/20",   glow: "shadow-brand-blue/20",   bar: "bg-brand-blue",   pill: "bg-brand-blue/15 text-brand-blue" },
+  purple: { bg: "bg-brand-purple/10", text: "text-brand-purple", border: "border-brand-purple/20", glow: "shadow-brand-purple/20", bar: "bg-brand-purple", pill: "bg-brand-purple/15 text-brand-purple" },
+  teal:   { bg: "bg-brand-teal/10",   text: "text-brand-teal",   border: "border-brand-teal/20",   glow: "shadow-brand-teal/20",   bar: "bg-brand-teal",   pill: "bg-brand-teal/15 text-brand-teal" },
+};
 
-      <div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-        <div className="space-y-8">
-          <h2 className="text-5xl font-display font-bold tracking-tight leading-tight">
-            Designed to think. <br />
-            Built to execute.
-          </h2>
-          <p className="text-white/60 text-xl leading-relaxed max-w-lg font-medium">
-            Each agent works independently or together as your unified AI team. 
-            Automating the tedious so you can focus on the closing.
-          </p>
-          <div className="space-y-4 pt-8 border-t border-white/10">
-            {agents.map((agent, i) => (
-              <motion.div 
+export default function AgentSystem({ id }: { id?: string }) {
+  return (
+    <section id={id} className="py-20 sm:py-32 px-4 sm:px-6 bg-[#0a0a0f] text-white overflow-hidden relative">
+
+      {/* Subtle grid background */}
+      <div
+        className="absolute inset-0 opacity-[0.04] pointer-events-none"
+        style={{
+          backgroundImage: "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+      />
+
+      {/* Radial glow center */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-brand-blue/5 blur-[120px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto relative z-10">
+
+        {/* ── Section header ── */}
+        <div className="text-center mb-16 sm:mb-20 space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-white/40"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+            Agent Cluster · 3 Active
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.05 }}
+            className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold tracking-tight leading-[1.05]"
+          >
+            Designed to think.{" "}
+            <span className="text-white/30">Built to execute.</span>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-white/40 text-base sm:text-lg max-w-xl mx-auto leading-relaxed font-medium"
+          >
+            Three specialized agents. One unified AI team. Automating every stage of the deal so you can focus on closing.
+          </motion.p>
+        </div>
+
+        {/* ── Agent cards grid ── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
+          {agents.map((agent, i) => {
+            const c = colorMap[agent.color as keyof typeof colorMap];
+            return (
+              <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                initial={{ opacity: 0, y: 32 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ 
-                  delay: i * 0.15,
-                  type: "spring",
-                  stiffness: 120,
-                  damping: 14,
-                  bounce: 0.3
-                }}
-                className="flex items-start gap-4 p-5 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors group"
+                transition={{ delay: i * 0.1, type: "spring", stiffness: 100, damping: 16 }}
+                className="group relative rounded-3xl border border-white/[0.07] bg-white/[0.03] hover:bg-white/[0.06] transition-all duration-500 overflow-hidden flex flex-col"
               >
-                <div className="w-10 h-10 rounded-xl bg-brand-blue/20 text-brand-blue flex items-center justify-center shrink-0 border border-brand-blue/20 group-hover:scale-110 transition-transform">
-                  <agent.icon className="w-5 h-5" />
+                {/* Top accent line */}
+                <div className={`h-px w-full ${c.bar} opacity-40`} />
+
+                <div className="p-6 sm:p-8 flex flex-col gap-6 flex-1">
+
+                  {/* Agent header */}
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-11 h-11 rounded-2xl ${c.bg} ${c.text} border ${c.border} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform`}>
+                        <agent.icon className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="font-bold text-white text-base leading-tight">{agent.name}</div>
+                        <div className={`text-[10px] font-black uppercase tracking-widest mt-0.5 ${c.text} opacity-70`}>{agent.role}</div>
+                      </div>
+                    </div>
+                    <div className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full ${c.pill}`}>
+                      {agent.id}
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-white/40 text-sm leading-relaxed font-medium flex-1">
+                    {agent.desc}
+                  </p>
+
+                  {/* Task list */}
+                  <div className="space-y-2">
+                    {agent.tasks.map((task, ti) => (
+                      <motion.div
+                        key={ti}
+                        initial={{ opacity: 0, x: -8 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.1 + ti * 0.06 }}
+                        className="flex items-center gap-2.5"
+                      >
+                        <div className={`w-1 h-1 rounded-full ${c.bar} shrink-0`} />
+                        <span className="text-[12px] text-white/30 font-medium">{task}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* Stat + CTA row */}
+                  <div className="flex items-center justify-between pt-4 border-t border-white/[0.06]">
+                    <div>
+                      <div className={`text-2xl font-display font-black ${c.text}`}>{agent.stat}</div>
+                      <div className="text-[10px] text-white/25 font-bold uppercase tracking-widest">{agent.statLabel}</div>
+                    </div>
+                    <button className={`flex items-center gap-1.5 text-xs font-bold ${c.text} group/btn`}>
+                      Explore
+                      <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-bold text-lg mb-1">{agent.name}</h4>
-                  <p className="text-white/40 text-sm leading-relaxed font-medium">{agent.desc}</p>
-                </div>
+
+                {/* Hover glow */}
+                <div className={`absolute -bottom-16 -right-16 w-40 h-40 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-700 ${c.bar}`} />
               </motion.div>
+            );
+          })}
+        </div>
+
+        {/* ── Live pipeline strip ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="mt-6 rounded-2xl border border-white/[0.07] bg-white/[0.02] px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5"
+        >
+          {/* Pipeline steps */}
+          <div className="flex items-center gap-0 overflow-x-auto w-full sm:w-auto">
+            {[
+              { label: "Upload Doc", active: true },
+              { label: "Ria Extracts", active: true },
+              { label: "Forms Filled", active: true },
+              { label: "Staged", active: false },
+              { label: "Published", active: false },
+            ].map((step, i, arr) => (
+              <div key={i} className="flex items-center shrink-0">
+                <div className="flex items-center gap-2 px-3 py-1.5">
+                  <div className={`w-1.5 h-1.5 rounded-full ${step.active ? "bg-green-400" : "bg-white/15"} ${step.active ? "shadow-[0_0_6px_rgba(74,222,128,0.8)]" : ""}`} />
+                  <span className={`text-[11px] font-bold uppercase tracking-widest whitespace-nowrap ${step.active ? "text-white/70" : "text-white/20"}`}>
+                    {step.label}
+                  </span>
+                </div>
+                {i < arr.length - 1 && (
+                  <div className="w-6 h-px bg-white/10 shrink-0" />
+                )}
+              </div>
             ))}
           </div>
-        </div>
 
-        <div className="relative group">
-          {/* Orbital Rings */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] pointer-events-none">
-             <motion.div 
-               animate={{ rotate: 360 }}
-               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-               className="absolute inset-0 border border-white/5 rounded-full"
-             />
-             <motion.div 
-               animate={{ rotate: -360 }}
-               transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-               className="absolute inset-12 border border-white/5 rounded-full border-dashed"
-             />
+          {/* Right side */}
+          <div className="flex items-center gap-4 shrink-0">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.6)]" />
+              <span className="text-[11px] font-black uppercase tracking-widest text-white/30">3 agents running</span>
+            </div>
+            <a
+              href="#cta"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-ink text-[11px] font-black uppercase tracking-widest hover:bg-white/90 transition-colors group"
+            >
+              Start Pipeline
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </a>
           </div>
+        </motion.div>
 
-          <div className="aspect-square glass-card bg-white/5 rounded-full border border-white/10 p-16 flex items-center justify-center relative">
-             {/* Pulsing Core Glow */}
-             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-brand-blue/20 rounded-full blur-[100px] animate-pulse" />
-             
-             <div className="relative w-full h-full flex items-center justify-center">
-                {/* Network Visualization */}
-                <svg className="absolute inset-0 w-full h-full overflow-visible pointer-events-none">
-                    <defs>
-                      <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="var(--color-brand-blue)" stopOpacity="0" />
-                        <stop offset="50%" stopColor="var(--color-brand-blue)" stopOpacity="0.5" />
-                        <stop offset="100%" stopColor="var(--color-brand-blue)" stopOpacity="0" />
-                      </linearGradient>
-                    </defs>
-                    
-                    {/* Dynamic Connection Lines */}
-                    {[
-                      { x: "15%", y: "15%" }, { x: "85%", y: "15%" },
-                      { x: "15%", y: "85%" }, { x: "85%", y: "85%" }
-                    ].map((pos, i) => (
-                      <g key={i}>
-                        <line x1="50%" y1="50%" x2={pos.x} y2={pos.y} stroke="white" strokeWidth="0.5" strokeOpacity="0.1" />
-                        <motion.circle
-                          r="2"
-                          fill="var(--color-brand-blue)"
-                          initial={{ offsetDistance: "0%" }}
-                          animate={{ 
-                            cx: ["50%", pos.x],
-                            cy: ["50%", pos.y],
-                            opacity: [0, 1, 0]
-                          }}
-                          transition={{ 
-                            duration: 2 + i, 
-                            repeat: Infinity, 
-                            ease: "easeInOut",
-                            delay: i * 0.5 
-                          }}
-                        />
-                      </g>
-                    ))}
-                </svg>
-
-                {/* Floating Agent Status Cards */}
-                <motion.div 
-                  animate={{ y: [0, -15, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute -top-12 -left-12 bg-white p-5 rounded-2xl text-ink shadow-heavy min-w-[220px] border border-border/50 z-20"
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-ink-soft">Ria · Analysis</span>
-                  </div>
-                  <div className="text-sm font-bold tracking-tight">Extracting Tax Records...</div>
-                  <div className="mt-3 h-1 w-full bg-muted rounded-full overflow-hidden">
-                    <motion.div 
-                      animate={{ width: ["0%", "100%"] }}
-                      transition={{ duration: 3, repeat: Infinity }}
-                      className="h-full bg-brand-blue"
-                    />
-                  </div>
-                </motion.div>
-
-                <motion.div 
-                  animate={{ y: [0, 15, 0] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                  className="absolute -bottom-12 -right-12 bg-white p-5 rounded-2xl text-ink shadow-heavy min-w-[220px] border border-border/50 z-20"
-                >
-                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-2 h-2 rounded-full bg-brand-purple" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-ink-soft">Market Agent</span>
-                  </div>
-                  <div className="text-sm font-bold tracking-tight">Optimizing Ad Spend</div>
-                  <div className="mt-3 flex gap-1">
-                    {[1,2,3,4,5].map(i => (
-                      <motion.div 
-                        key={i}
-                        animate={{ height: [4, 12, 4] }}
-                        transition={{ duration: 1, repeat: Infinity, delay: i * 0.1 }}
-                        className="w-1 bg-brand-purple/30 rounded-full"
-                      />
-                    ))}
-                  </div>
-                </motion.div>
-
-                {/* Micro-Task Fragments */}
-                {[
-                  { label: "Tax ID: 82-194", pos: { top: "25%", right: "20%" }, delay: 0.2 },
-                  { label: "v_staging_v2.mp4", pos: { bottom: "30%", left: "15%" }, delay: 1.5 },
-                  { label: "SEO Meta: Generated", pos: { top: "45%", left: "10%" }, delay: 0.8 },
-                  { label: "IDX Sync: Stable", pos: { bottom: "40%", right: "12%" }, delay: 2.2 },
-                ].map((task, i) => (
-                  <motion.div
-                    key={i}
-                    animate={{ 
-                      y: [0, -10, 0],
-                      opacity: [0.3, 0.7, 0.3]
-                    }}
-                    transition={{ 
-                      duration: 4, 
-                      repeat: Infinity, 
-                      delay: task.delay,
-                      ease: "easeInOut" 
-                    }}
-                    className="absolute z-10 glass-card px-3 py-1.5 rounded-lg border-white/5 text-[9px] font-mono font-bold text-white/40 whitespace-nowrap shadow-elevated"
-                    style={task.pos}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="w-1 h-1 rounded-full bg-brand-blue" />
-                      {task.label}
-                    </div>
-                  </motion.div>
-                ))}
-
-                {/* Floating Geometric Noise */}
-                <div className="absolute inset-0 pointer-events-none opacity-20">
-                  {[...Array(4)].map((_, i) => (
-                    <motion.div
-                      key={i}
-                      animate={{ 
-                        scale: [1, 1.1, 1],
-                        opacity: [0.1, 0.2, 0.1],
-                        rotate: [0, 90, 180] 
-                      }}
-                      transition={{ 
-                        duration: 15 + i * 5, 
-                        repeat: Infinity, 
-                        ease: "linear" 
-                      }}
-                      className="absolute w-40 h-40 border border-white/10 rounded-full"
-                      style={{
-                        top: `${10 + Math.random() * 80}%`,
-                        left: `${10 + Math.random() * 80}%`,
-                      }}
-                    />
-                  ))}
-                </div>
-
-                {/* Central Brain Core */}
-                <motion.div 
-                  whileHover={{ scale: 1.05 }}
-                  className="w-32 h-32 rounded-[2.5rem] bg-gradient-to-br from-brand-blue to-brand-purple flex items-center justify-center shadow-[0_0_50px_rgba(99,102,241,0.3)] relative z-10 group/core"
-                >
-                   <div className="text-4xl font-display font-black text-white">S</div>
-                   {/* Orbiting particles around core */}
-                   <div className="absolute inset-0 border border-white/20 rounded-[2.5rem] scale-110 animate-ping opacity-20" />
-                </motion.div>
-             </div>
-          </div>
-        </div>
       </div>
     </section>
   );

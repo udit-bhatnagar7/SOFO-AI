@@ -96,6 +96,7 @@ export default function LiveOutput() {
             max="100" 
             value={sliderPos} 
             onChange={(e) => setSliderPos(Number(e.target.value))}
+            aria-label="Before and after staging comparison"
             className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-30"
           />
           <div className="absolute bottom-6 left-6 glass-card px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest text-ink shadow-soft">Empty Listing</div>
@@ -112,10 +113,12 @@ export default function LiveOutput() {
       tag: "Distribution",
       visual: (
         <div className="glass-card rounded-3xl overflow-hidden flex flex-col shadow-heavy border-border h-full bg-white">
-          <div className="flex border-b border-border bg-muted/10 p-1">
+          <div className="flex border-b border-border bg-muted/10 p-1" role="tablist" aria-label="Social platform">
             {["Instagram", "Facebook", "LinkedIn"].map((tab) => (
               <button
                 key={tab}
+                role="tab"
+                aria-selected={activeTab === tab}
                 onClick={() => setActiveTab(tab)}
                 className={`flex-1 py-3 text-[10px] font-bold uppercase tracking-[0.1em] rounded-xl transition-all ${activeTab === tab ? "text-ink bg-white shadow-soft border border-border" : "text-ink-soft hover:text-ink"}`}
               >
@@ -194,9 +197,9 @@ export default function LiveOutput() {
   ];
 
   return (
-    <section id="output" className="py-32 px-6 bg-white overflow-hidden relative">
+    <section id="output" className="py-16 sm:py-32 px-4 sm:px-6 bg-white overflow-hidden relative">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center space-y-6 max-w-3xl mx-auto mb-32">
+        <div className="text-center space-y-6 max-w-3xl mx-auto mb-16 sm:mb-32">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -207,7 +210,7 @@ export default function LiveOutput() {
           <motion.h2 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-5xl sm:text-6xl font-display font-black text-ink tracking-tight leading-[1.1]"
+            className="text-4xl sm:text-5xl lg:text-6xl font-display font-black text-ink tracking-tight leading-[1.1]"
           >
             Real results, in seconds.
           </motion.h2>
@@ -215,15 +218,15 @@ export default function LiveOutput() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-ink-soft text-xl leading-relaxed font-medium"
+            className="text-ink-soft text-lg sm:text-xl leading-relaxed font-medium"
           >
             Watch our agents transform raw inputs into production-ready assets.
           </motion.p>
         </div>
 
-        <div className="space-y-48">
+        <div className="space-y-24 sm:space-y-48">
           {features.map((feature, i) => (
-            <div key={i} className="flex flex-col lg:flex-row gap-20 items-center">
+            <div key={i} className="flex flex-col lg:flex-row gap-10 sm:gap-20 items-center">
               {/* Design Column (Left) */}
               <motion.div 
                 initial={{ opacity: 0, x: -30 }}
@@ -242,10 +245,10 @@ export default function LiveOutput() {
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
-                className="w-full lg:w-1/2 space-y-8"
+                className="w-full lg:w-1/2 space-y-6 sm:space-y-8"
               >
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3">
+                <div className="space-y-5 sm:space-y-6">
+                  <div className="flex items-center gap-3 flex-wrap">
                     <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
                       feature.color === 'blue' ? 'bg-blue-50 text-brand-blue' : 
                       feature.color === 'purple' ? 'bg-purple-50 text-brand-purple' : 
@@ -257,16 +260,16 @@ export default function LiveOutput() {
                     <span className="text-[10px] font-bold text-ink-soft uppercase tracking-widest">{feature.tag}</span>
                   </div>
                   
-                  <h3 className="text-4xl sm:text-5xl font-display font-bold text-ink leading-tight tracking-tight">
+                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-ink leading-tight tracking-tight">
                     {feature.title}
                   </h3>
                   
-                  <p className="text-ink-soft text-lg leading-relaxed max-w-lg font-medium">
+                  <p className="text-ink-soft text-base sm:text-lg leading-relaxed max-w-lg font-medium">
                     {feature.desc}
                   </p>
                 </div>
                 
-                <div className="pt-8 border-t border-border flex items-center gap-8">
+                <div className="pt-6 sm:pt-8 border-t border-border flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-8">
                   <button className={`group flex items-center gap-2 text-sm font-bold transition-all ${
                     feature.color === 'blue' ? 'text-brand-blue' : 
                     feature.color === 'purple' ? 'text-brand-purple' : 

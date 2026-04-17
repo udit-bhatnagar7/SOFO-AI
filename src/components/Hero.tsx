@@ -1,29 +1,33 @@
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowRight, Sparkles, Upload, FileText, Layout, Megaphone, Calendar, PlayCircle } from "lucide-react";
+import { ArrowRight, Sparkles, FileText, Layout, Megaphone, Calendar, PlayCircle } from "lucide-react";
 import { useState } from "react";
+import { useBooking } from "../context/BookingContext";
+import { useVideo } from "../context/VideoContext";
 
 export default function Hero() {
   const [activeMode, setActiveMode] = useState<"extraction" | "staging" | "marketing">("extraction");
+  const { openModal } = useBooking();
+  const { openVideo } = useVideo();
 
   return (
-    <section className="relative pt-24 pb-20 overflow-hidden noise">
+    <section className="relative pt-20 sm:pt-24 pb-16 sm:pb-20 overflow-hidden noise">
       {/* Background Layers */}
       <div className="absolute inset-0 bg-gradient-mesh" />
-      <div className="absolute inset-0 grid-bg opacity-70" />
-      <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[480px] w-[900px] rounded-full bg-gradient-soft blur-2xl" />
+      <div className="absolute inset-0 grid-bg opacity-40" />
+      <div className="absolute -top-60 left-1/2 -translate-x-1/2 h-[600px] w-[1000px] rounded-full bg-gradient-soft blur-3xl opacity-60" />
 
-      <div className="relative mx-auto max-w-screen-2xl px-6 lg:px-12 content-layer flex flex-col items-center gap-16 py-12">
+      <div className="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-12 content-layer flex flex-col items-center gap-10 sm:gap-16 py-8 sm:py-12">
         
         {/* Top: Intelligence Console */}
-        <div className="w-full text-center z-10 space-y-10 max-w-4xl">
-          <div className="space-y-6">
+        <div className="w-full text-center z-10 space-y-8 sm:space-y-10 max-w-4xl">
+          <div className="space-y-5 sm:space-y-6">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-elevated/70 backdrop-blur px-3 py-1.5 text-xs font-medium text-ink-soft shadow-sm"
             >
               <Sparkles className="h-3.5 w-3.5 text-brand-blue" />
-              SofuAI Agentic Operating System v1.0
+              SofuAI Agentic
             </motion.div>
 
             <motion.h1 
@@ -40,7 +44,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-base sm:text-lg text-ink-soft leading-relaxed max-w-xl mx-auto"
+              className="text-base sm:text-lg text-ink-soft leading-relaxed max-w-xl mx-auto px-2"
             >
               Outcome-driven AI agents that automatically complete end-to-end workflows: listing creation, document processing, and global marketing distribution.
             </motion.p>
@@ -51,14 +55,20 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-wrap items-center justify-center gap-5 pt-4"
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-5 pt-2 sm:pt-4"
           >
-            <a href="#book" className="group inline-flex items-center gap-3 rounded-2xl bg-ink text-white text-base font-bold px-8 py-4 hover:bg-brand-blue transition-all shadow-heavy hover:-translate-y-0.5">
+            <button
+              onClick={openModal}
+              className="group inline-flex items-center gap-3 rounded-2xl bg-ink text-white text-base font-bold px-6 sm:px-8 py-3.5 sm:py-4 hover:bg-brand-blue transition-all shadow-heavy hover:-translate-y-0.5 w-full sm:w-auto justify-center"
+            >
               <Calendar className="h-5 w-5 opacity-70" /> Book a Demo <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </a>
-            <a href="#tour" className="inline-flex items-center gap-3 rounded-2xl border border-border bg-surface-elevated text-ink text-base font-bold px-8 py-4 hover:bg-muted transition-all shadow-sm">
+            </button>
+            <button
+              onClick={openVideo}
+              className="inline-flex items-center gap-3 rounded-2xl border border-border bg-surface-elevated text-ink text-base font-bold px-6 sm:px-8 py-3.5 sm:py-4 hover:bg-muted transition-all shadow-sm w-full sm:w-auto justify-center"
+            >
               <PlayCircle className="h-5 w-5 text-brand-blue" /> Watch Product Tour
-            </a>
+            </button>
           </motion.div>
         </div>
 
@@ -80,21 +90,21 @@ export default function Hero() {
               className="absolute -inset-40 blur-[140px] rounded-full z-0 pointer-events-none" 
             />
 
-            <div className="relative rounded-2xl border border-border/80 bg-white/95 backdrop-blur-2xl shadow-mega overflow-hidden h-[680px] flex flex-col transition-all duration-700">
+            <div className="relative rounded-2xl border border-border/80 bg-white/95 backdrop-blur-2xl shadow-mega overflow-hidden h-[520px] sm:h-[600px] lg:h-[680px] flex flex-col transition-all duration-700">
               {/* Hub OS Header */}
-              <div className="flex items-center justify-between px-8 py-5 border-b border-border/40 bg-muted/20">
-                <div className="flex items-center gap-6">
+              <div className="flex items-center justify-between px-4 sm:px-8 py-3 sm:py-5 border-b border-border/40 bg-muted/20 gap-3">
+                <div className="flex items-center gap-3 sm:gap-6">
                   <div className="flex gap-1.5">
                     <span className="h-2 w-2 rounded-full bg-red-400/20 border border-red-400/30" />
                     <span className="h-2 w-2 rounded-full bg-yellow-400/20 border border-yellow-400/30" />
                     <span className="h-2 w-2 rounded-full bg-green-400/20 border border-green-400/30" />
                   </div>
-                  <div className="text-[9px] font-black uppercase tracking-[0.4em] text-ink-soft/60">
+                  <div className="hidden sm:block text-[9px] font-black uppercase tracking-[0.4em] text-ink-soft/60">
                     SOFO AI
                   </div>
                 </div>
 
-                <div className="flex p-1 bg-muted/40 border border-border/40 rounded-xl">
+                <div className="flex p-1 bg-muted/40 border border-border/40 rounded-xl overflow-x-auto" role="tablist" aria-label="Workspace mode">
                   {[
                     { id: "extraction", icon: FileText, label: "RIA" },
                     { id: "staging", icon: Layout, label: "Staging AI" },
@@ -102,8 +112,11 @@ export default function Hero() {
                    ].map((station) => (
                     <button
                       key={station.id}
-                      onClick={() => setActiveMode(station.id as any)}
-                      className={`relative flex items-center gap-2.5 px-4 py-2 rounded-lg transition-all duration-500 ease-out ${
+                      role="tab"
+                      aria-selected={activeMode === station.id}
+                      aria-controls={`panel-${station.id}`}
+                      onClick={() => setActiveMode(station.id as "extraction" | "staging" | "marketing")}
+                      className={`relative flex items-center gap-1.5 sm:gap-2.5 px-2.5 sm:px-4 py-2 rounded-lg transition-all duration-500 ease-out whitespace-nowrap ${
                         activeMode === station.id ? "text-ink" : "text-ink-soft hover:text-ink hover:bg-white/40"
                       }`}
                     >
@@ -115,45 +128,45 @@ export default function Hero() {
                         />
                       )}
                       <station.icon className={`relative z-10 w-3.5 h-3.5 transition-colors duration-500 ${activeMode === station.id ? "text-brand-blue" : "opacity-40"}`} />
-                      <span className="relative z-10 text-[10px] font-black uppercase tracking-widest">{station.label}</span>
+                      <span className="relative z-10 text-[9px] sm:text-[10px] font-black uppercase tracking-widest">{station.label}</span>
                     </button>
                   ))}
                 </div>
               </div>
 
               {/* The Stage: Horizontal Panning Workspace */}
-            <div className="flex-1 relative overflow-hidden h-[640px]">
+            <div className="flex-1 relative overflow-hidden">
                <motion.div 
                  animate={{ x: activeMode === 'extraction' ? '0%' : activeMode === 'staging' ? '-33.333%' : '-66.666%' }}
                  transition={{ type: "spring", stiffness: 80, damping: 20 }}
                  className="absolute inset-y-0 left-0 flex w-[300%] h-full"
                >
                  {/* Workspace 01: RIA Automation */}
-                 <div className="w-1/3 flex-shrink-0 h-full p-8 xl:p-12 flex flex-col justify-center">
-                    <div className="grid lg:grid-cols-[1fr_320px] gap-12 items-center">
+                 <div className="w-1/3 flex-shrink-0 h-full p-4 sm:p-8 xl:p-12 flex flex-col justify-center overflow-y-auto">
+                    <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 sm:gap-12 items-center">
                        <div className="relative group">
                           <div className="absolute -inset-10 bg-brand-purple/5 blur-3xl rounded-full opacity-50" />
-                          <div className="relative p-6 xl:p-8 rounded-2xl border border-border/40 bg-white shadow-elevated">
-                             <div className="flex items-center justify-between mb-8">
-                                <div className="flex items-center gap-4">
-                                   <div className="w-12 h-12 rounded-2xl bg-brand-purple/10 text-brand-purple flex items-center justify-center">
-                                      <FileText className="w-6 h-6" />
+                          <div className="relative p-4 sm:p-6 xl:p-8 rounded-2xl border border-border/40 bg-white shadow-elevated">
+                             <div className="flex items-center justify-between mb-5 sm:mb-8">
+                                <div className="flex items-center gap-3 sm:gap-4">
+                                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-brand-purple/10 text-brand-purple flex items-center justify-center">
+                                      <FileText className="w-5 h-5 sm:w-6 sm:h-6" />
                                    </div>
                                    <div className="text-left">
-                                      <h4 className="text-md font-bold text-ink leading-tight">RIA Automation</h4>
+                                      <h4 className="text-sm sm:text-md font-bold text-ink leading-tight">RIA Automation</h4>
                                       <div className="text-[9px] font-black uppercase tracking-widest text-brand-purple/60 mt-1">Real Estate Intelligence</div>
                                    </div>
                                 </div>
                              </div>
 
-                          <div className="space-y-4">
+                          <div className="space-y-3 sm:space-y-4">
                              {[
                                 { l: "Source Input", v: "DOCS, IMAGES, NOTES", w: "100%" },
                                 { l: "Task Status", v: "MLS AUTO-FILL READY", w: "100%" },
                                 { l: "Agent Output", v: "LISTING DESCRIPTIONS", w: "95%" },
                                 { l: "System Outcome", v: "VALIDATED FORMS", w: "40%" }
                              ].map((f, i) => (
-                                <div key={i} className="relative p-4 rounded-xl border border-border/30 bg-muted/5 group overflow-hidden">
+                                <div key={i} className="relative p-3 sm:p-4 rounded-xl border border-border/30 bg-muted/5 group overflow-hidden">
                                    <motion.div 
                                       initial={{ width: 0 }}
                                       animate={{ width: f.w }}
@@ -161,17 +174,17 @@ export default function Hero() {
                                    />
                                    <div className="relative flex flex-col items-start gap-1">
                                       <span className="text-[10px] font-black uppercase tracking-widest text-ink-soft/40">{f.l}</span>
-                                      <span className="text-sm font-bold text-ink">{f.v}</span>
+                                      <span className="text-xs sm:text-sm font-bold text-ink">{f.v}</span>
                                    </div>
                                 </div>
                              ))}
                           </div>
                        </div>
                     </div>
-                       <div className="space-y-6 text-left">
+                       <div className="space-y-4 sm:space-y-6 text-left">
                           <div className="space-y-3">
                              <div className="inline-flex px-2 py-1 rounded bg-muted/40 text-[9px] font-black uppercase tracking-widest text-ink/40">Workflow: Process Listing</div>
-                             <div className="text-xs font-mono text-ink-soft/80 leading-relaxed bg-muted/10 p-5 rounded-2xl border border-border/20 shadow-inner">
+                             <div className="text-xs font-mono text-ink-soft/80 leading-relaxed bg-muted/10 p-4 sm:p-5 rounded-2xl border border-border/20 shadow-inner">
                                 {">"} Input: listing_agreement.pdf<br/>
                                 {">"} Input: drone_shot_01.jpg<br/>
                                 {">"} Agent: RIA Extracting Data...<br/>
@@ -269,8 +282,8 @@ export default function Hero() {
                  </div>
 
                  {/* Workspace 03: Marketing Agent */}
-                 <div className="w-1/3 flex-shrink-0 h-full p-12 flex items-center">
-                    <div className="w-full grid lg:grid-cols-[1fr_400px] gap-12 items-center">
+                 <div className="w-1/3 flex-shrink-0 h-full p-4 sm:p-8 lg:p-12 flex items-center overflow-y-auto">
+                    <div className="w-full grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8 sm:gap-12 items-center">
                        <div className="space-y-8 text-left">
                           <div className="space-y-6">
                              <div className="w-14 h-14 rounded-2xl bg-brand-teal/10 text-brand-teal flex items-center justify-center shadow-soft">
@@ -350,16 +363,17 @@ export default function Hero() {
             </div>
             
             {/* Hub OS Footer Action */}
-            <div className="px-8 py-5 border-t border-border/40 bg-muted/20 flex items-center justify-between">
-               <div className="flex items-center gap-6">
+            <div className="px-4 sm:px-8 py-3 sm:py-5 border-t border-border/40 bg-muted/20 flex items-center justify-between gap-3">
+               <div className="flex items-center gap-3 sm:gap-6">
                   <div className="flex items-center gap-2 group cursor-pointer">
                      <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
-                     <span className="text-[10px] font-black text-ink-soft uppercase tracking-widest group-hover:text-ink transition-colors">Agent_Cluster_Sync_Active</span>
+                     <span className="text-[9px] sm:text-[10px] font-black text-ink-soft uppercase tracking-widest group-hover:text-ink transition-colors hidden sm:block">Agent_Cluster_Sync_Active</span>
+                     <span className="text-[9px] font-black text-ink-soft uppercase tracking-widest group-hover:text-ink transition-colors sm:hidden">Active</span>
                   </div>
                </div>
-               <button className="flex items-center gap-3 px-6 py-2.5 rounded-xl bg-ink text-white text-[10px] font-black uppercase tracking-[0.2em] hover:bg-brand-blue transition-all shadow-heavy group">
+               <button className="flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl bg-ink text-white text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] hover:bg-brand-blue transition-all shadow-heavy group whitespace-nowrap">
                   Execute Workflow
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
                </button>
             </div>
           </div>
