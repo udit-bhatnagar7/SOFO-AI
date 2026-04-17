@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { useState } from "react";
-import { Check, ArrowRight, FileText, Share2, Sparkles, WandSparkles } from "lucide-react";
+import { ArrowRight, FileText, Share2, Sparkles, WandSparkles, ShieldCheck, Check } from "lucide-react";
 
 export default function LiveOutput() {
   const [sliderPos, setSliderPos] = useState(50);
@@ -105,6 +105,87 @@ export default function LiveOutput() {
       )
     },
     {
+      agent: "Transaction Manager",
+      title: "Every form, filled instantly.",
+      desc: "The Transaction Manager processes seller disclosures, IABS forms, and the full closing stack with surgical precision. Upload once, get 12+ forms completed in seconds.",
+      cta: "Process Documents",
+      color: "indigo",
+      tag: "Compliance",
+      visual: (
+        <div className="bg-white rounded-3xl border border-border shadow-heavy overflow-hidden h-full flex flex-col">
+          {/* Header */}
+          <div className="px-6 py-4 border-b border-border/40 bg-muted/20 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center">
+                <ShieldCheck className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="text-sm font-bold text-ink">Closing Stack</div>
+                <div className="text-[9px] font-black uppercase tracking-widest text-indigo-500">Auto-processing</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-50 border border-green-200">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-[10px] font-black text-green-700 uppercase tracking-widest">12 / 12 Done</span>
+            </div>
+          </div>
+
+          {/* Form list — shows 5 rows, rest scrollable */}
+          <div
+            data-lenis-prevent
+            className="overflow-y-auto divide-y divide-border/20"
+            style={{ maxHeight: "calc(7 * 48px)" }}
+          >
+            {[
+              { name: "Listing Agreement",     time: "0.3s" },
+              { name: "Seller Disclosure",     time: "0.6s" },
+              { name: "IABS Form",             time: "0.9s" },
+              { name: "Lead Paint Disclosure", time: "1.1s" },
+              { name: "HOA Addendum",          time: "1.4s" },
+              { name: "Commission Agreement",  time: "1.7s" },
+              { name: "MLS Input Sheet",       time: "2.0s" },
+              { name: "Earnest Money Receipt", time: "2.2s" },
+              { name: "Title Commitment",      time: "2.5s" },
+              { name: "Showing Instructions",  time: "2.7s" },
+              { name: "Lockbox Authorization", time: "2.9s" },
+              { name: "Property Survey",       time: "3.1s" },
+            ].map((form, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className="flex items-center justify-between px-6 py-3"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-4 h-4 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                    <Check className="w-2.5 h-2.5 text-green-600" strokeWidth={3} />
+                  </div>
+                  <span className="text-sm font-medium text-ink">{form.name}</span>
+                </div>
+                <span className="text-[10px] font-mono text-ink-soft/50">{form.time}</span>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Stats footer */}
+          <div className="px-6 py-4 border-t border-border/40 bg-muted/10 grid grid-cols-3 gap-4">
+            {[
+              { val: "100%", label: "Compliance" },
+              { val: "0",    label: "Errors" },
+              { val: "3.1s", label: "Total time" },
+            ].map((s, i) => (
+              <div key={i} className="text-center">
+                <div className="text-xl font-display font-black text-indigo-600">{s.val}</div>
+                <div className="text-[9px] font-bold text-ink-soft uppercase tracking-widest">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    },
+    {
       agent: "Marketing Agent",
       title: "Marketing on autopilot.",
       desc: "Marketing Automation takes your listing data and generates cross-platform campaigns. From high-engagement Instagram reels to 1,000-word LinkedIn articles ready in one click.",
@@ -127,8 +208,8 @@ export default function LiveOutput() {
             ))}
           </div>
           <div className="p-8 space-y-6">
-            <div className="aspect-square bg-muted/30 rounded-2xl p-4 border border-border/50 relative group overflow-hidden">
-               <div className="grid grid-cols-2 grid-rows-2 gap-3 h-full">
+            <div className="h-48 bg-muted/30 rounded-2xl p-3 border border-border/50 relative group overflow-hidden">
+               <div className="grid grid-cols-2 gap-3 h-full">
                  <div className="relative rounded-xl overflow-hidden group/img">
                    <img 
                      src="https://picsum.photos/seed/ad1/600/600" 
@@ -147,7 +228,7 @@ export default function LiveOutput() {
                    />
                    <div className="absolute inset-0 bg-black/10" />
                  </div>
-                 <div className="relative rounded-xl overflow-hidden group/img col-span-2">
+                 <div className="relative rounded-xl overflow-hidden group/img col-span-2 hidden">
                    <img 
                      src="https://picsum.photos/seed/ad3/1200/600" 
                      className="absolute inset-0 w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" 
@@ -200,13 +281,6 @@ export default function LiveOutput() {
     <section id="output" className="py-16 sm:py-32 px-4 sm:px-6 bg-white overflow-hidden relative">
       <div className="max-w-7xl mx-auto">
         <div className="text-center space-y-6 max-w-3xl mx-auto mb-16 sm:mb-32">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            className="w-12 h-12 rounded-2xl bg-muted border border-border mx-auto flex items-center justify-center mb-6"
-          >
-            <WandSparkles className="w-6 h-6 text-brand-blue" />
-          </motion.div>
           <motion.h2 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -226,7 +300,7 @@ export default function LiveOutput() {
 
         <div className="space-y-24 sm:space-y-48">
           {features.map((feature, i) => (
-            <div key={i} className="flex flex-col lg:flex-row gap-10 sm:gap-20 items-center">
+            <div key={i} className={`flex flex-col lg:flex-row gap-10 sm:gap-20 items-center ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
               {/* Design Column (Left) */}
               <motion.div 
                 initial={{ opacity: 0, x: -30 }}
@@ -252,6 +326,7 @@ export default function LiveOutput() {
                     <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
                       feature.color === 'blue' ? 'bg-blue-50 text-brand-blue' : 
                       feature.color === 'purple' ? 'bg-purple-50 text-brand-purple' : 
+                      feature.color === 'indigo' ? 'bg-indigo-50 text-indigo-600' :
                       'bg-teal-50 text-brand-teal'
                     }`}>
                       Agent ID: {feature.agent.split(' ')[0]}
@@ -273,6 +348,7 @@ export default function LiveOutput() {
                   <button className={`group flex items-center gap-2 text-sm font-bold transition-all ${
                     feature.color === 'blue' ? 'text-brand-blue' : 
                     feature.color === 'purple' ? 'text-brand-purple' : 
+                    feature.color === 'indigo' ? 'text-indigo-600' :
                     'text-brand-teal'
                   }`}>
                     {feature.cta} 

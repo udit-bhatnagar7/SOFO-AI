@@ -1,13 +1,30 @@
-import { motion, AnimatePresence } from "motion/react";
-import { ArrowRight, Sparkles, FileText, Layout, Megaphone, Calendar, PlayCircle } from "lucide-react";
+import { motion } from "motion/react";
+import { ArrowRight, Sparkles, FileText, Layout, Megaphone, Calendar, PlayCircle, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { useBooking } from "../context/BookingContext";
 import { useVideo } from "../context/VideoContext";
 
+type WorkspaceMode = "extraction" | "staging" | "transaction" | "marketing";
+
 export default function Hero() {
-  const [activeMode, setActiveMode] = useState<"extraction" | "staging" | "marketing">("extraction");
+  const [activeMode, setActiveMode] = useState<WorkspaceMode>("extraction");
   const { openModal } = useBooking();
   const { openVideo } = useVideo();
+
+  const modeIndex: Record<WorkspaceMode, number> = {
+    extraction: 0,
+    staging: 1,
+    transaction: 2,
+    marketing: 3,
+  };
+
+  const xOffset = `${modeIndex[activeMode] * -25}%`;
+
+  const glowColor =
+    activeMode === "extraction" ? "#a855f7" :
+    activeMode === "staging"    ? "#3b82f6" :
+    activeMode === "transaction"? "#6366f1" :
+    "#14b8a6";
 
   return (
     <section className="relative pt-20 sm:pt-24 pb-16 sm:pb-20 overflow-hidden noise">
@@ -27,7 +44,7 @@ export default function Hero() {
               className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-elevated/70 backdrop-blur px-3 py-1.5 text-xs font-medium text-ink-soft shadow-sm"
             >
               <Sparkles className="h-3.5 w-3.5 text-brand-blue" />
-              SofuAI Agentic
+              SofoAI Agentic
             </motion.div>
 
             <motion.h1 
@@ -83,7 +100,7 @@ export default function Hero() {
             {/* Global Ambient Glow */}
             <motion.div 
               animate={{ 
-                backgroundColor: activeMode === 'extraction' ? '#a855f7' : activeMode === 'staging' ? '#3b82f6' : '#14b8a6',
+                backgroundColor: glowColor,
                 opacity: [0.1, 0.2, 0.1]
               }}
               transition={{ duration: 4, repeat: Infinity }}
@@ -106,16 +123,17 @@ export default function Hero() {
 
                 <div className="flex p-1 bg-muted/40 border border-border/40 rounded-xl overflow-x-auto" role="tablist" aria-label="Workspace mode">
                   {[
-                    { id: "extraction", icon: FileText, label: "RIA" },
-                    { id: "staging", icon: Layout, label: "Staging AI" },
-                    { id: "marketing", icon: Megaphone, label: "Marketing" }
+                    { id: "extraction",  icon: FileText,    label: "RIA" },
+                    { id: "staging",     icon: Layout,      label: "Staging AI" },
+                    { id: "transaction", icon: ShieldCheck, label: "Transaction" },
+                    { id: "marketing",   icon: Megaphone,   label: "Marketing" },
                    ].map((station) => (
                     <button
                       key={station.id}
                       role="tab"
                       aria-selected={activeMode === station.id}
                       aria-controls={`panel-${station.id}`}
-                      onClick={() => setActiveMode(station.id as "extraction" | "staging" | "marketing")}
+                      onClick={() => setActiveMode(station.id as WorkspaceMode)}
                       className={`relative flex items-center gap-1.5 sm:gap-2.5 px-2.5 sm:px-4 py-2 rounded-lg transition-all duration-500 ease-out whitespace-nowrap ${
                         activeMode === station.id ? "text-ink" : "text-ink-soft hover:text-ink hover:bg-white/40"
                       }`}
@@ -137,12 +155,12 @@ export default function Hero() {
               {/* The Stage: Horizontal Panning Workspace */}
             <div className="flex-1 relative overflow-hidden">
                <motion.div 
-                 animate={{ x: activeMode === 'extraction' ? '0%' : activeMode === 'staging' ? '-33.333%' : '-66.666%' }}
+                 animate={{ x: xOffset }}
                  transition={{ type: "spring", stiffness: 80, damping: 20 }}
-                 className="absolute inset-y-0 left-0 flex w-[300%] h-full"
+                 className="absolute inset-y-0 left-0 flex w-[400%] h-full"
                >
                  {/* Workspace 01: RIA Automation */}
-                 <div className="w-1/3 flex-shrink-0 h-full p-4 sm:p-8 xl:p-12 flex flex-col justify-center overflow-y-auto">
+                 <div className="w-1/4 flex-shrink-0 h-full p-4 sm:p-8 xl:p-12 flex flex-col justify-center overflow-y-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 sm:gap-12 items-center">
                        <div className="relative group">
                           <div className="absolute -inset-10 bg-brand-purple/5 blur-3xl rounded-full opacity-50" />
@@ -200,7 +218,7 @@ export default function Hero() {
                  </div>
 
                  {/* Workspace 02: Virtual Staging AI */}
-                 <div className="w-1/3 flex-shrink-0 h-full p-0 flex">
+                 <div className="w-1/4 flex-shrink-0 h-full p-0 flex">
                     <div className="flex-1 relative overflow-hidden group flex">
                        {/* Left Side: Empty Room */}
                        <div className="flex-1 relative border-r border-white/10 overflow-hidden">
@@ -281,8 +299,80 @@ export default function Hero() {
                     </div>
                  </div>
 
-                 {/* Workspace 03: Marketing Agent */}
-                 <div className="w-1/3 flex-shrink-0 h-full p-4 sm:p-8 lg:p-12 flex items-center overflow-y-auto">
+                 {/* Workspace 03: Transaction Manager */}
+                 <div className="w-1/4 flex-shrink-0 h-full p-4 sm:p-8 xl:p-12 flex flex-col justify-center overflow-y-auto">
+                    <div className="max-w-2xl mx-auto w-full space-y-6">
+                       {/* Header */}
+                       <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center">
+                             <ShieldCheck className="w-6 h-6" />
+                          </div>
+                          <div>
+                             <h4 className="font-bold text-ink text-base leading-tight">Transaction Manager</h4>
+                             <div className="text-[9px] font-black uppercase tracking-widest text-indigo-500 mt-0.5">Document Processor</div>
+                          </div>
+                          <div className="ml-auto flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-50 border border-green-200">
+                             <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                             <span className="text-[10px] font-black text-green-700 uppercase tracking-widest">Processing</span>
+                          </div>
+                       </div>
+
+                       {/* Form completion list */}
+                       <div className="rounded-2xl border border-border/40 bg-white shadow-elevated overflow-hidden">
+                          <div className="px-5 py-3 border-b border-border/30 bg-muted/20 flex items-center justify-between">
+                             <span className="text-[10px] font-black uppercase tracking-widest text-ink-soft">Closing Stack</span>
+                             <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">12 / 12 Complete</span>
+                          </div>
+                          <div className="divide-y divide-border/20">
+                             {[
+                                { name: "Listing Agreement",      status: "filled",   time: "0.3s" },
+                                { name: "Seller Disclosure",      status: "filled",   time: "0.6s" },
+                                { name: "IABS Form",              status: "filled",   time: "0.9s" },
+                                { name: "Lead Paint Disclosure",  status: "filled",   time: "1.1s" },
+                                { name: "HOA Addendum",           status: "filled",   time: "1.4s" },
+                                { name: "Commission Agreement",   status: "filled",   time: "1.7s" },
+                                { name: "MLS Input Sheet",        status: "filled",   time: "2.0s" },
+                                { name: "Earnest Money Receipt",  status: "filled",   time: "2.2s" },
+                             ].map((form, i) => (
+                                <motion.div
+                                   key={i}
+                                   initial={{ opacity: 0, x: -8 }}
+                                   animate={{ opacity: 1, x: 0 }}
+                                   transition={{ delay: i * 0.08 }}
+                                   className="flex items-center justify-between px-5 py-3"
+                                >
+                                   <div className="flex items-center gap-3">
+                                      <div className="w-4 h-4 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                                         <svg className="w-2.5 h-2.5 text-green-600" fill="none" viewBox="0 0 12 12" stroke="currentColor" strokeWidth={2.5}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M2 6l3 3 5-5" />
+                                         </svg>
+                                      </div>
+                                      <span className="text-xs font-medium text-ink">{form.name}</span>
+                                   </div>
+                                   <span className="text-[10px] font-mono text-ink-soft/50">{form.time}</span>
+                                </motion.div>
+                             ))}
+                          </div>
+                       </div>
+
+                       {/* Stats row */}
+                       <div className="grid grid-cols-3 gap-3">
+                          {[
+                             { val: "100%", label: "Compliance" },
+                             { val: "0",    label: "Errors" },
+                             { val: "2.1s", label: "Avg. fill time" },
+                          ].map((s, i) => (
+                             <div key={i} className="text-center p-3 rounded-xl bg-muted/30 border border-border/30">
+                                <div className="text-lg font-display font-black text-indigo-600">{s.val}</div>
+                                <div className="text-[9px] font-bold text-ink-soft uppercase tracking-widest mt-0.5">{s.label}</div>
+                             </div>
+                          ))}
+                       </div>
+                    </div>
+                 </div>
+
+                 {/* Workspace 04: Marketing Agent */}
+                 <div className="w-1/4 flex-shrink-0 h-full p-4 sm:p-8 lg:p-12 flex items-center overflow-y-auto">
                     <div className="w-full grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8 sm:gap-12 items-center">
                        <div className="space-y-8 text-left">
                           <div className="space-y-6">
@@ -363,7 +453,7 @@ export default function Hero() {
             </div>
             
             {/* Hub OS Footer Action */}
-            <div className="px-4 sm:px-8 py-3 sm:py-5 border-t border-border/40 bg-muted/20 flex items-center justify-between gap-3">
+            <div className="px-4 sm:px-8 py-3 sm:py-5 border-t border-border/40 bg-muted/20 flex items-center justify-between gap-3 hidden">
                <div className="flex items-center gap-3 sm:gap-6">
                   <div className="flex items-center gap-2 group cursor-pointer">
                      <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]" />

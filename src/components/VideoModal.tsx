@@ -7,13 +7,13 @@ const products = [
   {
     id: "listing",
     label: "Listing Manager",
-    sub: "Ria — AI-powered MLS automation",
+    sub: "Ria: AI-powered MLS automation",
     icon: FileText,
     color: "blue",
     // Replace videoId with your real YouTube video IDs
     videoId: "dQw4w9WgXcQ",
     duration: "2:34",
-    desc: "Watch how Ria extracts data from any document, auto-fills 12+ MLS forms, and generates polished listing descriptions — all in under 60 seconds.",
+    desc: "Watch how Ria extracts data from any document, auto-fills 12+ MLS forms, and generates polished listing descriptions, all in under 60 seconds.",
     highlights: ["Document extraction", "MLS auto-fill", "Listing descriptions", "Compliance check"],
   },
   {
@@ -35,7 +35,7 @@ const products = [
     color: "teal",
     videoId: "dQw4w9WgXcQ",
     duration: "3:12",
-    desc: "One click generates Instagram posts, Facebook ads, LinkedIn articles, and email campaigns — all tailored to your listing.",
+    desc: "One click generates Instagram posts, Facebook ads, LinkedIn articles, and email campaigns, all tailored to your listing.",
     highlights: ["Social captions", "Ad creatives", "Email campaigns", "A/B testing"],
   },
   {
@@ -46,7 +46,7 @@ const products = [
     color: "orange",
     videoId: "dQw4w9WgXcQ",
     duration: "2:47",
-    desc: "Transform empty rooms into beautifully staged spaces. Day-to-dusk, exterior enhancement, and room emptying — all AI-generated.",
+    desc: "Transform empty rooms into beautifully staged spaces. Day-to-dusk, exterior enhancement, and room emptying, all AI-generated.",
     highlights: ["Virtual staging", "Day to dusk", "Exterior enhance", "Room emptying"],
   },
 ];

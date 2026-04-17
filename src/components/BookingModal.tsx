@@ -11,7 +11,7 @@ const services = [
   {
     id: "listing",
     label: "Listing Manager",
-    sub: "Ria — auto-fills MLS, generates descriptions",
+    sub: "Ria: auto-fills MLS, generates descriptions",
     icon: FileText,
     color: "blue",
   },
@@ -134,7 +134,7 @@ export default function BookingModal() {
                     {step === "done" && "You're all set! 🎉"}
                   </h2>
                   <p className="text-sm text-ink-soft mt-1 font-medium">
-                    {step === "service" && "Select one or more services — we'll tailor your demo."}
+                    {step === "service" && "Select one or more services. We will tailor your demo."}
                     {step === "details" && "We'll reach out within 24 hours to confirm your slot."}
                     {step === "done" && "Our team will contact you shortly to schedule your walkthrough."}
                   </p>

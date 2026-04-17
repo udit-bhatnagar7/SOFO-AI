@@ -12,7 +12,7 @@ const INITIAL_MESSAGES: Message[] = [
   {
     id: 0,
     role: "assistant",
-    text: "Hi! I'm SOFO AI. Ask me anything about automating your real estate workflows — listings, paperwork, or marketing. 🏡",
+    text: "Hi! I'm SOFO AI. Ask me anything about automating your real estate workflows: listings, paperwork, or marketing. 🏡",
   },
 ];
 
@@ -26,16 +26,16 @@ const QUICK_REPLIES = [
 function getReply(input: string): string {
   const q = input.toLowerCase();
   if (q.includes("ria") || q.includes("listing"))
-    return "Ria is your autonomous Listing Manager. She extracts data from documents, auto-fills MLS fields, and generates listing descriptions — all in seconds.";
+    return "Ria is your autonomous Listing Manager. She extracts data from documents, auto-fills MLS fields, and generates listing descriptions, all in seconds.";
   if (q.includes("form") || q.includes("paper") || q.includes("document"))
-    return "SOFO AI auto-fills 10+ forms including listing agreements, seller disclosures, IABS forms, and closing stacks — with surgical precision.";
+    return "SOFO AI auto-fills 10+ forms including listing agreements, seller disclosures, IABS forms, and closing stacks with surgical precision.";
   if (q.includes("stag"))
     return "Our Virtual Staging AI transforms empty rooms into beautifully furnished spaces. It also handles Day-to-Dusk, Exterior Enhancement, and Room Emptying.";
   if (q.includes("market") || q.includes("social") || q.includes("post"))
-    return "The Marketing Agent generates Instagram posts, Facebook ads, LinkedIn articles, and email campaigns from your listing data — one click, all platforms.";
+    return "The Marketing Agent generates Instagram posts, Facebook ads, LinkedIn articles, and email campaigns from your listing data. One click, all platforms.";
   if (q.includes("price") || q.includes("cost") || q.includes("plan"))
     return "We offer flexible plans for solo agents and teams. Book a demo via the button above and we'll walk you through pricing tailored to your volume.";
-  return "Great question! SOFO AI handles the full real estate workflow — from document extraction to virtual staging to marketing distribution. Want me to walk you through a specific feature?";
+  return "Great question! SOFO AI handles the full real estate workflow: from document extraction to virtual staging to marketing distribution. Want me to walk you through a specific feature?";
 }
 
 export default function ChatWidget() {
