@@ -132,9 +132,8 @@ export default function LiveOutput() {
 
           {/* Form list — shows 5 rows, rest scrollable */}
           <div
-            data-lenis-prevent
             className="overflow-y-auto divide-y divide-border/20"
-            style={{ maxHeight: "calc(7 * 48px)" }}
+            style={{ maxHeight: "calc(5 * 48px)" }}
           >
             {[
               { name: "Listing Agreement",     time: "0.3s" },

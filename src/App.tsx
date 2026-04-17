@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Lenis from "lenis";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import TrustLogos from "./components/TrustLogos";
@@ -22,27 +21,8 @@ import StagingPage from "./pages/StagingPage";
 import MarketingPage from "./pages/MarketingPage";
 
 function LandingPage() {
+  // Smooth anchor scroll without Lenis
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.4,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: "vertical",
-      gestureOrientation: "vertical",
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
-      infinite: false,
-    });
-
-    let rafId: number;
-
-    function raf(time: number) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-
-    rafId = requestAnimationFrame(raf);
-
     function handleAnchorClick(e: MouseEvent) {
       const target = e.target as HTMLElement;
       const anchor = target.closest("a[href^='#']") as HTMLAnchorElement | null;
@@ -52,16 +32,10 @@ function LandingPage() {
       const el = document.getElementById(id);
       if (!el) return;
       e.preventDefault();
-      lenis.scrollTo(el, { offset: -80, duration: 1.6 });
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-
     document.addEventListener("click", handleAnchorClick);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-      lenis.destroy();
-      document.removeEventListener("click", handleAnchorClick);
-    };
+    return () => document.removeEventListener("click", handleAnchorClick);
   }, []);
 
   return (
