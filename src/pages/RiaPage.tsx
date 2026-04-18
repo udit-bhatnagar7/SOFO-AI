@@ -199,23 +199,33 @@ function HeroSection() {
                 {fields.map((field, i) => (
                   <div key={i} className="space-y-1">
                     <div className="text-[10px] text-ink-soft font-semibold uppercase tracking-widest">{field.label}</div>
-                    <div className="relative h-9 rounded-lg bg-muted/40 border border-border overflow-hidden">
+                    <div className="relative h-9 rounded-lg bg-muted/40 border border-border overflow-hidden w-full">
                       {i < filledCount ? (
                         <motion.div
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
-                          className="absolute inset-0 flex items-center px-3"
+                          style={{ width: "100%" }}
+                          className="absolute inset-0 flex items-center justify-between px-3"
                         >
                           <span className="text-sm text-ink font-medium">{field.value}</span>
-                          <CheckCircle className="w-3.5 h-3.5 text-green-500 ml-auto shrink-0" />
+                          <CheckCircle className="w-3.5 h-3.5 text-green-500 shrink-0" />
                         </motion.div>
                       ) : i === filledCount ? (
-                        <motion.div
-                          initial={{ width: "0%" }}
-                          animate={{ width: "60%" }}
-                          transition={{ duration: 0.6 }}
-                          className="absolute inset-y-0 left-0 bg-brand-blue/20 rounded-lg"
-                        />
+                        <>
+                          <motion.div
+                            initial={{ width: "0%" }}
+                            animate={{ width: "100%" }}
+                            transition={{ duration: 0.6 }}
+                            className="absolute inset-y-0 left-0 bg-brand-blue/10 rounded-lg"
+                          />
+                          <div className="absolute inset-0 flex items-center px-3 gap-1">
+                            <motion.span
+                              animate={{ opacity: [1, 0, 1] }}
+                              transition={{ duration: 0.7, repeat: Infinity }}
+                              className="inline-block w-0.5 h-4 bg-brand-blue rounded-full"
+                            />
+                          </div>
+                        </>
                       ) : null}
                     </div>
                   </div>

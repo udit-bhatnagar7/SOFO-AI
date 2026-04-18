@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -20,8 +20,9 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useBooking } from "../context/BookingContext";
+import TransactionFlow from "../components/TransactionFlow";
 
-// ─── NAVBAR ───────────────────────────────────────────────────────────────────
+// â”€â”€â”€ NAVBAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function MarketingNavbar() {
   const { openModal } = useBooking();
   return (
@@ -61,7 +62,7 @@ function MarketingNavbar() {
   );
 }
 
-// ─── HERO ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 type Platform = "Instagram" | "Facebook" | "LinkedIn";
 
 const platformCaptions: Record<Platform, string> = {
@@ -253,7 +254,7 @@ function HeroSection() {
   );
 }
 
-// ─── LIVE OUTPUT SECTION ──────────────────────────────────────────────────────
+// â”€â”€â”€ LIVE OUTPUT SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function LiveOutputSection() {
   const platformCards = [
     {
@@ -400,7 +401,7 @@ function LiveOutputSection() {
   );
 }
 
-// ─── FEATURES SECTION ─────────────────────────────────────────────────────────
+// â”€â”€â”€ FEATURES SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function FeaturesSection() {
   const features = [
     {
@@ -532,7 +533,7 @@ function FeaturesSection() {
   );
 }
 
-// ─── WORKFLOW SECTION ─────────────────────────────────────────────────────────
+// â”€â”€â”€ WORKFLOW SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function WorkflowSection() {
   const steps = [
     {
@@ -649,7 +650,7 @@ function WorkflowSection() {
   );
 }
 
-// ─── PRODUCT UI MOCK ──────────────────────────────────────────────────────────
+// â”€â”€â”€ PRODUCT UI MOCK â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 type EditorTab = "Instagram" | "Facebook" | "LinkedIn";
 
 const editorCaptions: Record<EditorTab, string> = {
@@ -814,7 +815,7 @@ function ProductUIMock() {
   );
 }
 
-// ─── RESULTS SECTION ─────────────────────────────────────────────────────────
+// â”€â”€â”€ RESULTS SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function ResultsSection() {
   const stats = [
     { val: "10x", label: "faster content creation" },
@@ -890,7 +891,7 @@ function ResultsSection() {
   );
 }
 
-// ─── PRICING SECTION ─────────────────────────────────────────────────────────
+// â”€â”€â”€ PRICING SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function PricingSection() {
   const { openModal } = useBooking();
 
@@ -1016,7 +1017,7 @@ function PricingSection() {
   );
 }
 
-// ─── FINAL CTA SECTION ────────────────────────────────────────────────────────
+// â”€â”€â”€ FINAL CTA SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function FinalCTASection() {
   const { openModal } = useBooking();
 
@@ -1072,7 +1073,7 @@ function FinalCTASection() {
   );
 }
 
-// ─── PAGE EXPORT ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ PAGE EXPORT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function MarketingPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -1085,6 +1086,7 @@ export default function MarketingPage() {
       <LiveOutputSection />
       <FeaturesSection />
       <WorkflowSection />
+      <TransactionFlow />
       <ProductUIMock />
       <ResultsSection />
       <PricingSection />
@@ -1092,3 +1094,10 @@ export default function MarketingPage() {
     </div>
   );
 }
+
+
+
+
+
+
+

@@ -20,7 +20,8 @@ const BookingModal  = lazy(() => import("./components/BookingModal"));
 const VideoModal    = lazy(() => import("./components/VideoModal"));
 const RiaPage       = lazy(() => import("./pages/RiaPage"));
 const StagingPage   = lazy(() => import("./pages/StagingPage"));
-const MarketingPage = lazy(() => import("./pages/MarketingPage"));
+const MarketingPage     = lazy(() => import("./pages/MarketingPage"));
+const TransactionPage   = lazy(() => import("./pages/TransactionPage"));
 
 // Minimal fallback — invisible, no layout shift
 const PageFallback = () => (
@@ -79,7 +80,7 @@ export default function App() {
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
-  const isProductPage = hash === "#/ria" || hash === "#/staging" || hash === "#/marketing";
+  const isProductPage = hash === "#/ria" || hash === "#/staging" || hash === "#/marketing" || hash === "#/transaction";
 
   return (
     <BookingProvider>
@@ -88,6 +89,7 @@ export default function App() {
           {hash === "#/ria"       ? <RiaPage /> :
            hash === "#/staging"   ? <StagingPage /> :
            hash === "#/marketing" ? <MarketingPage /> :
+           hash === "#/transaction" ? <TransactionPage /> :
            <LandingPage />}
         </Suspense>
         {/* Prefetch product pages after idle — user likely to navigate there */}
