@@ -187,7 +187,7 @@ export default function ChatWidget() {
                 onKeyDown={(e) => e.key === "Enter" && sendMessage(input)}
                 placeholder="Ask SOFO AI anything..."
                 aria-label="Chat message input"
-                className="flex-1 text-sm bg-muted/40 border border-border/40 rounded-xl px-4 py-2.5 outline-none focus:border-brand-blue/40 focus:bg-white transition-colors placeholder:text-ink-soft/40 text-ink"
+                className="flex-1 text-sm bg-muted/40 border border-border/40 rounded-xl px-4 py-2.5 outline-none focus:border-brand-blue/40 focus:bg-white transition-colors placeholder:text-ink-soft/60 text-ink"
               />
               <button
                 onClick={() => sendMessage(input)}

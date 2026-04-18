@@ -242,7 +242,7 @@ export default function BookingModal() {
                                 if (errors[key]) setErrors((er) => { const n = { ...er }; delete n[key]; return n; });
                               }}
                               placeholder={placeholder}
-                              className="flex-1 bg-transparent text-sm text-ink placeholder:text-ink-soft/30 outline-none font-medium"
+                              className="flex-1 bg-transparent text-sm text-ink placeholder:text-ink-soft/50 outline-none font-medium"
                             />
                           </div>
                           {errors[key] && <p className="text-xs text-red-500 mt-1 font-medium">{errors[key]}</p>}

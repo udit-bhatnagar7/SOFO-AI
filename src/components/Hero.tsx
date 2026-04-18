@@ -1,10 +1,79 @@
-import { motion } from "motion/react";
-import { ArrowRight, Sparkles, FileText, Layout, Megaphone, Calendar, PlayCircle, ShieldCheck } from "lucide-react";
-import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { ArrowRight, Sparkles, FileText, Layout, Megaphone, Calendar, PlayCircle, ShieldCheck, Upload, Layers } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useBooking } from "../context/BookingContext";
 import { useVideo } from "../context/VideoContext";
 
 type WorkspaceMode = "extraction" | "staging" | "transaction" | "marketing";
+
+// Typing animation for the command input
+const COMMANDS = [
+  "Fill MLS from listing_agreement.pdf",
+  "Stage this empty living room photo",
+  "Create Instagram post for 1284 Oak Ridge Way",
+  "Auto-fill seller disclosure forms",
+  "Generate marketing campaign for new listing",
+];
+
+function CommandInput() {
+  const [cmdIndex, setCmdIndex] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [typing, setTyping] = useState(true);
+  const { openModal } = useBooking();
+
+  useEffect(() => {
+    const target = COMMANDS[cmdIndex];
+    if (typing) {
+      if (displayed.length < target.length) {
+        const t = setTimeout(() => setDisplayed(target.slice(0, displayed.length + 1)), 38);
+        return () => clearTimeout(t);
+      } else {
+        const t = setTimeout(() => setTyping(false), 1800);
+        return () => clearTimeout(t);
+      }
+    } else {
+      if (displayed.length > 0) {
+        const t = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 18);
+        return () => clearTimeout(t);
+      } else {
+        setCmdIndex((i) => (i + 1) % COMMANDS.length);
+        setTyping(true);
+      }
+    }
+  }, [displayed, typing, cmdIndex]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.35 }}
+      className="w-full max-w-2xl mx-auto hidden"
+    >
+      <div className="flex items-center gap-3 bg-white border border-border rounded-2xl px-4 py-3.5 shadow-elevated group focus-within:border-brand-blue/40 transition-colors">
+        <div className="w-7 h-7 rounded-lg bg-ink flex items-center justify-center shrink-0">
+          <Sparkles className="w-3.5 h-3.5 text-white" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <span className="text-sm sm:text-base text-ink font-medium">{displayed}</span>
+          <motion.span
+            animate={{ opacity: [1, 0, 1] }}
+            transition={{ duration: 0.8, repeat: Infinity }}
+            className="inline-block w-0.5 h-4 bg-brand-blue ml-0.5 align-middle"
+          />
+        </div>
+        <button
+          onClick={openModal}
+          className="shrink-0 flex items-center gap-1.5 bg-ink text-white text-xs font-bold px-4 py-2 rounded-xl hover:bg-brand-blue transition-colors"
+        >
+          Run <ArrowRight className="w-3 h-3" />
+        </button>
+      </div>
+      <p className="text-center text-[11px] text-ink-soft/50 mt-2 font-medium">
+        Try: "Stage this room" · "Fill MLS forms" · "Create Instagram post"
+      </p>
+    </motion.div>
+  );
+}
 
 export default function Hero() {
   const [activeMode, setActiveMode] = useState<WorkspaceMode>("extraction");
@@ -33,7 +102,7 @@ export default function Hero() {
       <div className="absolute inset-0 grid-bg opacity-40" />
       <div className="absolute -top-60 left-1/2 -translate-x-1/2 h-[600px] w-[1000px] rounded-full bg-gradient-soft blur-3xl opacity-60" />
 
-      <div className="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-12 content-layer flex flex-col items-center gap-10 sm:gap-16 py-8 sm:py-12">
+      <div className="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-12 content-layer flex flex-col items-center py-8 sm:py-12">
         
         {/* Top: Intelligence Console */}
         <div className="w-full text-center z-10 space-y-8 sm:space-y-10 max-w-4xl">
@@ -44,7 +113,7 @@ export default function Hero() {
               className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-elevated/70 backdrop-blur px-3 py-1.5 text-xs font-medium text-ink-soft shadow-sm"
             >
               <Sparkles className="h-3.5 w-3.5 text-brand-blue" />
-              SofoAI Agentic
+              SofoAI · Powered by RIA
             </motion.div>
 
             <motion.h1 
@@ -71,22 +140,31 @@ export default function Hero() {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-5 pt-2 sm:pt-4"
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-2 sm:pt-4"
           >
             <button
               onClick={openModal}
-              className="group inline-flex items-center gap-3 rounded-2xl bg-ink text-white text-base font-bold px-6 sm:px-8 py-3.5 sm:py-4 hover:bg-brand-blue transition-all shadow-heavy hover:-translate-y-0.5 w-full sm:w-auto justify-center"
+              className="group inline-flex items-center gap-2.5 rounded-2xl bg-ink text-white text-sm font-bold px-6 py-3.5 hover:bg-brand-blue transition-all shadow-heavy hover:-translate-y-0.5 w-full sm:w-auto justify-center"
             >
-              <Calendar className="h-5 w-5 opacity-70" /> Book a Demo <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              <Calendar className="h-4 w-4 opacity-70" /> Book a Demo <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <button
+              onClick={() => { window.location.hash = "#/staging"; }}
+              className="inline-flex items-center gap-2.5 rounded-2xl border border-border bg-white text-ink text-sm font-bold px-6 py-3.5 hover:bg-muted transition-all w-full sm:w-auto justify-center"
+            >
+              <Layers className="h-4 w-4 text-brand-purple" /> Try Virtual Staging
             </button>
             <button
               onClick={openVideo}
-              className="inline-flex items-center gap-3 rounded-2xl border border-border bg-surface-elevated text-ink text-base font-bold px-6 sm:px-8 py-3.5 sm:py-4 hover:bg-muted transition-all shadow-sm w-full sm:w-auto justify-center"
+              className="inline-flex items-center gap-2.5 rounded-2xl border border-border bg-white text-ink text-sm font-bold px-6 py-3.5 hover:bg-muted transition-all w-full sm:w-auto justify-center"
             >
-              <PlayCircle className="h-5 w-5 text-brand-blue" /> Watch Product Tour
+              <PlayCircle className="h-4 w-4 text-brand-blue" /> Watch Demo
             </button>
           </motion.div>
+
+          {/* Command Input */}
+          <CommandInput />
         </div>
 
         {/* Bottom: Spatial Workspace Hub */}
@@ -123,8 +201,8 @@ export default function Hero() {
 
                 <div className="flex p-1 bg-muted/40 border border-border/40 rounded-xl overflow-x-auto" role="tablist" aria-label="Workspace mode">
                   {[
-                    { id: "extraction",  icon: FileText,    label: "RIA" },
-                    { id: "staging",     icon: Layout,      label: "Staging AI" },
+                    { id: "extraction",  icon: FileText,    label: "Listing" },
+                    { id: "staging",     icon: Layout,      label: "Staging" },
                     { id: "transaction", icon: ShieldCheck, label: "Transaction" },
                     { id: "marketing",   icon: Megaphone,   label: "Marketing" },
                    ].map((station) => (
@@ -171,8 +249,8 @@ export default function Hero() {
                                       <FileText className="w-5 h-5 sm:w-6 sm:h-6" />
                                    </div>
                                    <div className="text-left">
-                                      <h4 className="text-sm sm:text-md font-bold text-ink leading-tight">RIA Automation</h4>
-                                      <div className="text-[9px] font-black uppercase tracking-widest text-brand-purple/60 mt-1">Real Estate Intelligence</div>
+                                      <p className="text-sm sm:text-md font-bold text-ink leading-tight">RIA Listing Manager</p>
+                                      <div className="text-[9px] font-black uppercase tracking-widest text-brand-purple/60 mt-1">MLS & Document Automation</div>
                                    </div>
                                 </div>
                              </div>
@@ -191,7 +269,7 @@ export default function Hero() {
                                       className="absolute inset-y-0 left-0 bg-brand-purple/5 border-r border-brand-purple/10"
                                    />
                                    <div className="relative flex flex-col items-start gap-1">
-                                      <span className="text-[10px] font-black uppercase tracking-widest text-ink-soft/40">{f.l}</span>
+                                      <span className="text-[10px] font-black uppercase tracking-widest text-ink-soft/60">{f.l}</span>
                                       <span className="text-xs sm:text-sm font-bold text-ink">{f.v}</span>
                                    </div>
                                 </div>
@@ -223,10 +301,12 @@ export default function Hero() {
                        {/* Left Side: Empty Room */}
                        <div className="flex-1 relative border-r border-white/10 overflow-hidden">
                           <img 
-                             src="https://images.unsplash.com/photo-1549517045-bc93de075e53?q=80&w=2070&auto=format&fit=crop" 
+                             src="https://images.unsplash.com/photo-1549517045-bc93de075e53?q=75&w=1200&auto=format&fit=crop" 
                              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                              alt="Empty Room"
                              referrerPolicy="no-referrer"
+                             loading="lazy"
+                             decoding="async"
                           />
                           <div className="absolute top-8 left-8">
                              <span className="px-3 py-1.5 rounded-lg bg-black/40 backdrop-blur-md border border-white/10 text-[9px] font-black text-white/70 uppercase tracking-widest">Original / Empty</span>
@@ -236,10 +316,12 @@ export default function Hero() {
                        {/* Right Side: Staged Room */}
                        <div className="flex-1 relative overflow-hidden">
                           <img 
-                             src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2070&auto=format&fit=crop" 
+                             src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=75&w=1200&auto=format&fit=crop" 
                              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                              alt="Staged Room"
                              referrerPolicy="no-referrer"
+                             loading="lazy"
+                             decoding="async"
                           />
                           <div className="absolute top-8 right-8">
                              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-brand-blue/40 backdrop-blur-md border border-brand-blue/20">
@@ -286,7 +368,7 @@ export default function Hero() {
                           <div className="flex items-end justify-between pointer-events-auto">
                              <div className="max-w-md text-left">
                                 <div className="inline-flex px-2 py-0.5 rounded bg-brand-blue/20 text-brand-blue text-[8px] font-black uppercase tracking-widest mb-4 border border-brand-blue/30 backdrop-blur">Visual Transformation</div>
-                                <h3 className="text-4xl font-display font-bold text-white mb-3 drop-shadow-lg">Virtual Staging AI</h3>
+                                <p className="text-4xl font-display font-bold text-white mb-3 drop-shadow-lg">Virtual Staging AI</p>
                                 <p className="text-base text-white/90 leading-relaxed font-medium drop-shadow-md">
                                    Enhance listing images: Virtual Staging, Day to Dusk transitions, Exterior Enhancement, and intelligent Room Emptying.
                                 </p>
@@ -308,7 +390,7 @@ export default function Hero() {
                              <ShieldCheck className="w-6 h-6" />
                           </div>
                           <div>
-                             <h4 className="font-bold text-ink text-base leading-tight">Transaction Manager</h4>
+                             <p className="font-bold text-ink text-base leading-tight">RIA Transaction Manager</p>
                              <div className="text-[9px] font-black uppercase tracking-widest text-indigo-500 mt-0.5">Document Processor</div>
                           </div>
                           <div className="ml-auto flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-50 border border-green-200">
@@ -380,7 +462,7 @@ export default function Hero() {
                                 <Megaphone className="w-7 h-7" />
                              </div>
                              <div>
-                                <h3 className="text-3xl font-display font-bold text-ink mb-4">Marketing Agent Hub</h3>
+                             <p className="text-3xl font-display font-bold text-ink mb-4">RIA Marketing Automation</p>
                                 <p className="text-base text-ink-soft leading-relaxed font-medium">
                                     Outcome-driven agent that generates social posts, ad creatives, and platform-specific captions across all channels.
                                 </p>
@@ -404,11 +486,11 @@ export default function Hero() {
 
                              <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                   <div className="text-[9px] font-black text-ink-soft/40 uppercase tracking-widest">Est. Reach</div>
+                                   <div className="text-[9px] font-black text-ink-soft/60 uppercase tracking-widest">Est. Reach</div>
                                    <div className="text-xl font-display font-bold text-ink">12.4k+</div>
                                 </div>
                                 <div className="space-y-1">
-                                   <div className="text-[9px] font-black text-ink-soft/40 uppercase tracking-widest">Placement</div>
+                                   <div className="text-[9px] font-black text-ink-soft/60 uppercase tracking-widest">Placement</div>
                                    <div className="text-xl font-display font-bold text-ink">Global Sync</div>
                                 </div>
                              </div>
@@ -421,7 +503,7 @@ export default function Hero() {
                        </div>
 
                        <div className="space-y-4">
-                          <div className="text-[10px] font-black text-ink-soft/40 uppercase tracking-[0.2em] mb-4 text-center">Agent Outputs</div>
+                          <div className="text-[10px] font-black text-ink-soft/60 uppercase tracking-[0.2em] mb-4 text-center">Agent Outputs</div>
                           <div className="grid grid-cols-2 gap-4">
                              {[
                                 { label: "Social", img: "https://picsum.photos/seed/s1/400/300", cap: "IG Post ✨" },

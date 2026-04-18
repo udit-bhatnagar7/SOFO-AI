@@ -4,9 +4,9 @@ import { useBooking } from "../context/BookingContext";
 
 const cards = [
   {
-    title: "Create Listings",
+    title: "RIA Listing Manager",
     subtitle: "From raw data to live listing",
-    desc: "Ria transforms property documents and photos into complete, publish-ready MLS listings: descriptions, fields, and all.",
+    desc: "RIA transforms property documents and photos into complete, publish-ready MLS listings: descriptions, fields, and all.",
     items: [
       "AI virtual staging in minutes",
       "Image enhancement & optimization",
@@ -15,7 +15,7 @@ const cards = [
     ],
     icon: Camera,
     color: "blue",
-    cta: "Start Listing",
+    cta: "Start with RIA",
     href: "#output",
     stat: "3.5 hrs",
     statLabel: "saved per listing",
@@ -23,9 +23,9 @@ const cards = [
     badgeColor: "bg-brand-blue/10 text-brand-blue",
   },
   {
-    title: "Digital Smart Forms",
+    title: "RIA Smart Forms",
     subtitle: "PDF → Collaborative digital forms",
-    desc: "Upload any PDF and SOFO AI converts it into a live digital form. Seller and agent fill it together in real-time. No printing, no scanning, no back-and-forth.",
+    desc: "Upload any PDF and RIA converts it into a live digital form. Seller and agent fill it together in real-time. No printing, no scanning, no back-and-forth.",
     items: [
       "PDF auto-converted to smart digital form",
       "Seller & agent fill simultaneously",
@@ -34,7 +34,7 @@ const cards = [
     ],
     icon: FileText,
     color: "purple",
-    cta: "Try Smart Forms",
+    cta: "Try RIA Forms",
     href: "#output",
     stat: "10+",
     statLabel: "forms digitized per deal",
@@ -42,9 +42,9 @@ const cards = [
     badgeColor: "bg-brand-purple/10 text-brand-purple",
   },
   {
-    title: "Market Listings",
+    title: "RIA Marketing Automation",
     subtitle: "One click, every platform",
-    desc: "Generate and distribute high-converting campaigns across Instagram, Facebook, LinkedIn, and email, tailored to each platform.",
+    desc: "RIA generates and distributes high-converting campaigns across Instagram, Facebook, LinkedIn, and email, tailored to each platform.",
     items: [
       "Platform-specific social posts",
       "Ad creatives & A/B variants",
@@ -53,7 +53,7 @@ const cards = [
     ],
     icon: Share2,
     color: "teal",
-    cta: "Generate Content",
+    cta: "Automate Marketing",
     href: "#output",
     stat: "12.4k+",
     statLabel: "avg. campaign reach",
@@ -113,7 +113,7 @@ export default function UseCases({ id }: { id?: string }) {
           >
             <span className="text-ink">Intelligent automation for</span>{" "}
             <br className="hidden sm:block" />
-            <span className="text-ink-soft/40">every stage</span>{" "}
+            <span className="text-ink-soft/70">every stage</span>{" "}
             <span className="text-ink">of the deal.</span>
           </motion.h2>
 
@@ -192,11 +192,11 @@ export default function UseCases({ id }: { id?: string }) {
                     href={card.href}
             onClick={(e: { preventDefault: () => void }) => {
                       e.preventDefault();
-                      if (card.title === "Digital Smart Forms") {
+                      if (card.title === "RIA Smart Forms") {
                         window.location.hash = "#/ria";
-                      } else if (card.title === "Create Listings") {
+                      } else if (card.title === "RIA Listing Manager") {
                         window.location.hash = "#/staging";
-                      } else if (card.title === "Market Listings") {
+                      } else if (card.title === "RIA Marketing Automation") {
                         window.location.hash = "#/marketing";
                       } else {
                         openModal();

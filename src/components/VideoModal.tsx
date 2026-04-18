@@ -202,10 +202,10 @@ export default function VideoModal() {
 
                             <div className="relative z-10 text-center px-6 mb-8">
                               <div className={`text-[10px] font-black uppercase tracking-[0.2em] mb-2 ${c.text}`}>{active.sub}</div>
-                              <h3 className="text-xl sm:text-2xl font-display font-bold text-white">{active.label}</h3>
+                              <p className="text-xl sm:text-2xl font-display font-bold text-white">{active.label}</p>
                               <div className="flex items-center justify-center gap-2 mt-2">
                                 <div className="w-1 h-1 rounded-full bg-white/30" />
-                                <span className="text-white/40 text-xs font-medium">{active.duration}</span>
+                                <span className="text-white/60 text-xs font-medium">{active.duration}</span>
                                 <div className="w-1 h-1 rounded-full bg-white/30" />
                               </div>
                             </div>
@@ -225,12 +225,12 @@ export default function VideoModal() {
 
                             {/* Nav arrows */}
                             <div className="absolute left-4 top-1/2 -translate-y-1/2 z-20">
-                              <button onClick={prev} className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors backdrop-blur-sm">
+                              <button onClick={prev} aria-label="Previous product" className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors backdrop-blur-sm">
                                 <ChevronLeft className="w-4 h-4 text-white" />
                               </button>
                             </div>
                             <div className="absolute right-4 top-1/2 -translate-y-1/2 z-20">
-                              <button onClick={next} className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors backdrop-blur-sm">
+                              <button onClick={next} aria-label="Next product" className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors backdrop-blur-sm">
                                 <ChevronRight className="w-4 h-4 text-white" />
                               </button>
                             </div>
@@ -264,7 +264,7 @@ export default function VideoModal() {
                       <div className="flex items-start justify-between gap-4">
                         <div>
                           <div className={`text-[10px] font-black uppercase tracking-widest mb-1 ${c.text}`}>{active.sub}</div>
-                          <h3 className="text-lg font-display font-bold text-ink">{active.label}</h3>
+                          <p className="text-lg font-display font-bold text-ink">{active.label}</p>
                         </div>
                         {!playing && (
                           <button

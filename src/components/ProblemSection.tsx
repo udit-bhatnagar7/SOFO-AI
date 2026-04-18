@@ -1,6 +1,44 @@
-import { motion } from "motion/react";
+import { motion, useInView, useMotionValue, useTransform, animate } from "motion/react";
+import { useEffect, useRef } from "react";
 import { Clock, Copy, AlertTriangle, FolderOpen, PhoneOff, TrendingDown, RefreshCw, Users, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useBooking } from "../context/BookingContext";
+
+// Animated counter — counts from 0 to a numeric target
+function AnimatedStat({ raw }: { raw: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
+  // Extract leading number, keep suffix (hrs, %, +, k, etc.)
+  const match = raw.match(/^([\d.]+)(.*)/);
+  const num = match ? parseFloat(match[1]) : null;
+  const suffix = match ? match[2] : "";
+  const prefix = raw.match(/^[^\d]/) ? raw[0] : "";
+
+  const mv = useMotionValue(0);
+
+  useEffect(() => {
+    if (!inView || num === null) return;
+    const ctrl = animate(mv, num, { duration: 1.4, ease: "easeOut" });
+    return ctrl.stop;
+  }, [inView, num, mv]);
+
+  // If no number found (e.g. "Every", "Solo") just render as-is
+  if (num === null) {
+    return <span ref={ref}>{raw}</span>;
+  }
+
+  return (
+    <span ref={ref} className="tabular-nums">
+      {prefix}
+      <motion.span>
+        {useTransform(mv, (v) =>
+          Number.isInteger(num) ? Math.round(v).toString() : v.toFixed(1)
+        )}
+      </motion.span>
+      {suffix}
+    </span>
+  );
+}
 
 const pains = [
   {
@@ -130,7 +168,9 @@ export default function ProblemSection() {
 
               {/* Stat */}
               <div className="flex items-end gap-1.5 mb-4">
-                <span className="text-3xl font-display font-black text-red-500 leading-none">{pain.stat}</span>
+                <span className="text-3xl font-display font-black text-red-500 leading-none">
+                  <AnimatedStat raw={pain.stat} />
+                </span>
                 <span className="text-[10px] font-black uppercase tracking-widest text-ink-soft/60 mb-0.5">{pain.label}</span>
               </div>
 
@@ -156,13 +196,31 @@ export default function ProblemSection() {
           transition={{ duration: 0.6 }}
           className="relative flex items-center gap-6 mb-14 sm:mb-20"
         >
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-          <div className="shrink-0 flex items-center gap-3 px-5 py-2.5 rounded-full border border-green-200 bg-green-50">
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-transparent origin-left"
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", stiffness: 200, damping: 18, delay: 0.3 }}
+            className="shrink-0 flex items-center gap-3 px-5 py-2.5 rounded-full border border-green-200 bg-green-50"
+          >
             <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse" />
             <span className="text-[11px] font-black uppercase tracking-[0.2em] text-green-700">SOFO AI solves all of this</span>
             <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse" />
-          </div>
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+          </motion.div>
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-transparent origin-right"
+          />
         </motion.div>
 
         {/* ── Solution grid ── */}
@@ -174,8 +232,16 @@ export default function ProblemSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05, type: "spring", stiffness: 120, damping: 16 }}
-              className="flex items-start gap-3 p-4 rounded-2xl border border-green-100 bg-green-50 hover:bg-green-100/60 hover:border-green-200 transition-colors group"
+              className="flex items-start gap-3 p-4 rounded-2xl border border-green-100 bg-green-50 hover:bg-green-100/60 hover:border-green-200 transition-colors group relative overflow-hidden"
             >
+              {/* Shimmer sweep on entry */}
+              <motion.div
+                initial={{ x: "-100%" }}
+                whileInView={{ x: "200%" }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 + 0.3, duration: 0.6, ease: "easeOut" }}
+                className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none"
+              />
               <div className="w-5 h-5 rounded-full bg-green-100 border border-green-200 flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
                 <CheckCircle2 className="w-3 h-3 text-green-600" />
               </div>
@@ -190,7 +256,7 @@ export default function ProblemSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="flex flex-col items-center justify-center gap-4"
         >
           <button
             onClick={openModal}

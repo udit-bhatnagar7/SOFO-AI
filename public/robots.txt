@@ -1,0 +1,14 @@
+# robots.txt — SofuAI (https://sofoai.com)
+# Generated for Vite SPA deployment
+
+# ── Allow all crawlers ──────────────────────────────────────────────────────
+User-agent: *
+Allow: /
+
+# Block build artifacts and internal paths
+Disallow: /src/
+Disallow: /.git/
+Disallow: /node_modules/
+
+# ── Sitemap ─────────────────────────────────────────────────────────────────
+Sitemap: https://sofoai.com/sitemap.xml

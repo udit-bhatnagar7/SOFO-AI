@@ -67,6 +67,8 @@ export default function LiveOutput() {
             className="absolute inset-0 w-full h-full object-cover"
             alt="Before"
             referrerPolicy="no-referrer"
+            loading="lazy"
+            decoding="async"
           />
           <div 
             className="absolute inset-0 w-full h-full"
@@ -77,6 +79,8 @@ export default function LiveOutput() {
               className="w-full h-full object-cover"
               alt="After"
               referrerPolicy="no-referrer"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <div 
@@ -215,6 +219,8 @@ export default function LiveOutput() {
                      className="absolute inset-0 w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" 
                      alt="Ad 1"
                      referrerPolicy="no-referrer"
+                     loading="lazy"
+                     decoding="async"
                    />
                    <div className="absolute inset-0 bg-black/10" />
                  </div>
@@ -224,6 +230,8 @@ export default function LiveOutput() {
                      className="absolute inset-0 w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" 
                      alt="Ad 2"
                      referrerPolicy="no-referrer"
+                     loading="lazy"
+                     decoding="async"
                    />
                    <div className="absolute inset-0 bg-black/10" />
                  </div>
@@ -233,6 +241,8 @@ export default function LiveOutput() {
                      className="absolute inset-0 w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500" 
                      alt="Ad 3"
                      referrerPolicy="no-referrer"
+                     loading="lazy"
+                     decoding="async"
                    />
                    <div className="absolute inset-0 bg-black/20" />
                    <div className="absolute inset-0 flex items-center justify-center">
@@ -262,6 +272,8 @@ export default function LiveOutput() {
                     className="w-8 h-8 rounded-full border-2 border-white bg-muted object-cover shadow-soft" 
                     alt="User"
                     referrerPolicy="no-referrer"
+                    loading="lazy"
+                    decoding="async"
                   />
                 ))}
                 <div className="w-8 h-8 rounded-full border-2 border-white bg-brand-teal text-[10px] text-white flex items-center justify-center font-bold shadow-soft transition-transform hover:scale-110 cursor-pointer">+18</div>
@@ -277,13 +289,13 @@ export default function LiveOutput() {
   ];
 
   return (
-    <section id="output" className="py-16 sm:py-32 px-4 sm:px-6 bg-white overflow-hidden relative">
+    <section id="output" className="py-10 sm:py-16 px-4 sm:px-6 bg-white overflow-hidden relative hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center space-y-6 max-w-3xl mx-auto mb-16 sm:mb-32">
+        <div className="text-center space-y-3 max-w-2xl mx-auto mb-10 sm:mb-16">
           <motion.h2 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-display font-black text-ink tracking-tight leading-[1.1]"
+            className="text-2xl sm:text-3xl lg:text-4xl font-display font-black text-ink tracking-tight leading-[1.1]"
           >
             Real results, in seconds.
           </motion.h2>
@@ -291,13 +303,13 @@ export default function LiveOutput() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-ink-soft text-lg sm:text-xl leading-relaxed font-medium"
+            className="text-ink-soft text-sm sm:text-base leading-relaxed font-medium"
           >
             Watch our agents transform raw inputs into production-ready assets.
           </motion.p>
         </div>
 
-        <div className="space-y-24 sm:space-y-48">
+        <div className="space-y-14 sm:space-y-24">
           {features.map((feature, i) => (
             <div key={i} className={`flex flex-col lg:flex-row gap-10 sm:gap-20 items-center ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
               {/* Design Column (Left) */}
@@ -318,7 +330,7 @@ export default function LiveOutput() {
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
-                className="w-full lg:w-1/2 space-y-6 sm:space-y-8"
+                className="w-full lg:w-1/2 space-y-4 sm:space-y-5"
               >
                 <div className="space-y-5 sm:space-y-6">
                   <div className="flex items-center gap-3 flex-wrap">
@@ -343,7 +355,7 @@ export default function LiveOutput() {
                   </p>
                 </div>
                 
-                <div className="pt-6 sm:pt-8 border-t border-border flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-8">
+                <div className="pt-4 sm:pt-5 border-t border-border flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
                   <button className={`group flex items-center gap-2 text-sm font-bold transition-all ${
                     feature.color === 'blue' ? 'text-brand-blue' : 
                     feature.color === 'purple' ? 'text-brand-purple' : 
@@ -362,6 +374,8 @@ export default function LiveOutput() {
                           className="w-5 h-5 rounded-full border border-white bg-muted object-cover" 
                           alt="Team Member"
                           referrerPolicy="no-referrer"
+                          loading="lazy"
+                          decoding="async"
                         />
                       ))}
                     </div>

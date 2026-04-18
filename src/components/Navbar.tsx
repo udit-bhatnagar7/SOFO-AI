@@ -4,10 +4,10 @@ import { Menu, X } from "lucide-react";
 import { useBooking } from "../context/BookingContext";
 
 const navLinks = [
-  { label: "Agents", href: "#agents" },
-  { label: "Use Cases", href: "#use-cases" },
-  { label: "Workflows", href: "#workflows" },
-  { label: "Pricing", href: "#cta" },
+  { label: "RIA Platform", href: "#agents" },
+  { label: "Use Cases",    href: "#use-cases" },
+  { label: "Workflows",    href: "#workflows" },
+  { label: "Pricing",      href: "#cta" },
 ];
 
 export default function Navbar() {

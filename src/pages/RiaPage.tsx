@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import React from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   ArrowLeft,
   Upload,
@@ -16,6 +15,7 @@ import {
   Star,
   Check,
   ChevronRight,
+  RefreshCw,
 } from "lucide-react";
 import { useBooking } from "../context/BookingContext";
 
@@ -35,7 +35,7 @@ function RiaNavbar() {
           </button>
           <a
             href="#"
-            onClick={(e: React.MouseEvent) => { e.preventDefault(); window.location.hash = ""; }}
+            onClick={(e: { preventDefault: () => void }) => { e.preventDefault(); window.location.hash = ""; }}
             className="flex items-center gap-2"
           >
             <div className="w-8 h-8 rounded-lg bg-ink flex items-center justify-center text-white font-display font-black shadow-soft">
@@ -244,75 +244,337 @@ function HeroSection() {
   );
 }
 
+// ─── FORM FILLING PANEL ───────────────────────────────────────────────────────
+// Shows the active form being filled field-by-field with typewriter effect
+function FormFillingPanel({
+  activeStep,
+  filledCount,
+  completedForms,
+}: {
+  activeStep: number;
+  filledCount: number;
+  completedForms: string[];
+}) {
+  // The "active" form being filled right now
+  const activeFormIdx = Math.min(filledCount, completedForms.length - 1);
+  const activeFormName = completedForms[activeFormIdx] ?? completedForms[0];
+
+  // Fields shown inside the active form document
+  const formFields: Record<string, { label: string; value: string }[]> = {
+    "Listing Agreement": [
+      { label: "Seller Name",    value: "Bhatnagar Living Trust" },
+      { label: "Property",       value: "1284 Oak Ridge Way" },
+      { label: "List Price",     value: "$1,840,000" },
+      { label: "Commission",     value: "2.5%" },
+      { label: "Effective Date", value: "04/18/2026" },
+    ],
+    "Seller Disclosure": [
+      { label: "Owner Name",     value: "Bhatnagar Living Trust" },
+      { label: "Property Addr", value: "1284 Oak Ridge Way" },
+      { label: "HOA",            value: "Yes — $285/mo" },
+      { label: "Year Built",     value: "2018" },
+      { label: "Sq Footage",     value: "3,420 sq ft" },
+    ],
+    "IABS Form": [
+      { label: "Broker Name",    value: "SOFO Realty Group" },
+      { label: "License No.",    value: "TX-0094821" },
+      { label: "Client Name",    value: "Bhatnagar Living Trust" },
+      { label: "Property",       value: "1284 Oak Ridge Way" },
+      { label: "Date",           value: "04/18/2026" },
+    ],
+  };
+
+  const defaultFields = [
+    { label: "Property",   value: "1284 Oak Ridge Way" },
+    { label: "Seller",     value: "Bhatnagar Living Trust" },
+    { label: "Date",       value: "04/18/2026" },
+    { label: "Amount",     value: "$1,840,000" },
+  ];
+
+  const fields = formFields[activeFormName] ?? defaultFields;
+
+  // Typewriter: how many chars of each field value to show
+  const [charCounts, setCharCounts] = useState<number[]>([]);
+  const [fieldIdx, setFieldIdx] = useState(0);
+
+  // Reset and re-run typewriter whenever the active form changes
+  useEffect(() => {
+    if (activeStep < 2) return;
+    setCharCounts([]);
+    setFieldIdx(0);
+  }, [activeFormName, activeStep]);
+
+  useEffect(() => {
+    if (activeStep < 2) return;
+    if (fieldIdx >= fields.length) return;
+    const target = fields[fieldIdx].value;
+    const current = charCounts[fieldIdx] ?? 0;
+    if (current < target.length) {
+      const t = setTimeout(() => {
+        setCharCounts((prev) => {
+          const next = [...prev];
+          next[fieldIdx] = (next[fieldIdx] ?? 0) + 1;
+          return next;
+        });
+      }, 28);
+      return () => clearTimeout(t);
+    } else {
+      // Move to next field after short pause
+      const t = setTimeout(() => setFieldIdx((p: number) => p + 1), 120);
+      return () => clearTimeout(t);
+    }
+  }, [charCounts, fieldIdx, fields, activeStep]);
+
+  const progress = (filledCount / completedForms.length) * 100;
+
+  return (
+    <div className="bg-white rounded-2xl border border-border shadow-soft overflow-hidden flex flex-col">
+      {/* Header */}
+      <div className="px-4 py-3 border-b border-border bg-muted/30 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className={`w-2 h-2 rounded-full transition-colors ${activeStep >= 2 ? "bg-green-500 animate-pulse" : "bg-border"}`} />
+          <span className="text-[10px] font-black uppercase tracking-widest text-ink-soft">Forms Auto-Filled</span>
+        </div>
+        <motion.span
+          key={filledCount}
+          initial={{ scale: 1.3 }}
+          animate={{ scale: 1 }}
+          className="text-[10px] font-black text-green-600"
+        >
+          {filledCount} / {completedForms.length}
+        </motion.span>
+      </div>
+
+      {/* Progress bar */}
+      <div className="px-4 pt-3 pb-1">
+        <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+          <motion.div
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="h-full rounded-full bg-gradient-to-r from-brand-blue to-green-500"
+          />
+        </div>
+      </div>
+
+      {/* Active form document */}
+      <div className="flex-1 p-4 flex flex-col gap-3">
+        {/* Form title bar */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeFormName}
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 6 }}
+            transition={{ duration: 0.2 }}
+            className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-brand-blue/5 border border-brand-blue/10"
+          >
+            <div className="w-6 h-6 rounded-lg bg-brand-blue/10 flex items-center justify-center shrink-0">
+              <FileText className="w-3.5 h-3.5 text-brand-blue" />
+            </div>
+            <span className="text-xs font-bold text-brand-blue truncate">{activeFormName}</span>
+            {activeStep >= 2 && filledCount > activeFormIdx && (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 400 }}
+                className="ml-auto shrink-0"
+              >
+                <CheckCircle className="w-4 h-4 text-green-500" />
+              </motion.div>
+            )}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Form fields being typed */}
+        <div className="space-y-2">
+          {fields.map((field, i) => {
+            const typed = charCounts[i] ?? 0;
+            const isDone = typed >= field.value.length;
+            const isActive = i === fieldIdx && activeStep >= 2;
+
+            return (
+              <div
+                key={`${activeFormName}-${i}`}
+                className={`rounded-lg border transition-all duration-200 overflow-hidden ${
+                  isDone ? "border-green-200 bg-green-50/50" :
+                  isActive ? "border-brand-blue/30 bg-brand-blue/3" :
+                  "border-border/40 bg-muted/20"
+                }`}
+              >
+                <div className="flex items-center gap-2 px-3 py-2">
+                  <span className="text-[9px] font-black uppercase tracking-widest text-ink-soft/60 w-20 shrink-0">
+                    {field.label}
+                  </span>
+                  <div className="flex-1 min-w-0 flex items-center gap-1">
+                    <span className={`text-xs font-semibold ${isDone ? "text-ink" : "text-ink/70"}`}>
+                      {field.value.slice(0, typed)}
+                    </span>
+                    {/* Blinking cursor on active field */}
+                    {isActive && !isDone && (
+                      <motion.span
+                        animate={{ opacity: [1, 0, 1] }}
+                        transition={{ duration: 0.5, repeat: Infinity }}
+                        className="inline-block w-0.5 h-3 bg-brand-blue rounded-full"
+                      />
+                    )}
+                  </div>
+                  {isDone && (
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                      className="shrink-0"
+                    >
+                      <Check className="w-3 h-3 text-green-500" strokeWidth={3} />
+                    </motion.div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Completed forms mini-list */}
+        {filledCount > 0 && (
+          <div className="mt-auto pt-2 border-t border-border/30">
+            <div className="text-[9px] font-black uppercase tracking-widest text-ink-soft/50 mb-1.5">Completed</div>
+            <div className="flex flex-wrap gap-1">
+              {completedForms.slice(0, filledCount).map((f, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  className="text-[9px] font-semibold px-2 py-0.5 rounded-full bg-green-50 border border-green-200 text-green-700"
+                >
+                  {f}
+                </motion.span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Done state */}
+      <AnimatePresence>
+        {activeStep === 3 && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mx-4 mb-4 p-3 rounded-xl bg-green-50 border border-green-200 flex items-center gap-3"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 300, delay: 0.1 }}
+              className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center shrink-0"
+            >
+              <Check className="w-4 h-4 text-white" strokeWidth={3} />
+            </motion.div>
+            <div>
+              <div className="text-sm font-bold text-green-800">All 12 forms completed</div>
+              <div className="text-[10px] text-green-600">Zero errors · Ready to submit</div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 // ─── INSTANT DEMO SECTION ─────────────────────────────────────────────────────
 function InstantDemoSection() {
-  const steps = [
-    {
-      num: "01",
-      title: "Upload Document",
-      icon: Upload,
-      content: (
-        <div className="mt-3 p-3 rounded-xl bg-muted border border-border flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-red-50 border border-red-100 flex items-center justify-center shrink-0">
-            <FileText className="w-4 h-4 text-red-500" />
-          </div>
-          <div>
-            <div className="text-sm font-semibold text-ink">listing_agreement.pdf</div>
-            <div className="text-[11px] text-ink-soft">2.4 MB - Uploaded</div>
-          </div>
-          <CheckCircle className="w-4 h-4 text-green-500 ml-auto shrink-0" />
-        </div>
-      ),
-    },
-    {
-      num: "02",
-      title: "AI Extracts Data",
-      icon: Zap,
-      content: (
-        <div className="mt-3 space-y-2">
-          {[
-            { label: "Seller", value: "Bhatnagar Living Trust" },
-            { label: "Address", value: "1284 Oak Ridge Way" },
-            { label: "Price", value: "$1,840,000" },
-            { label: "Commission", value: "2.5%" },
-          ].map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: -10 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="flex items-center justify-between px-3 py-2 rounded-lg bg-muted border border-border"
-            >
-              <span className="text-[11px] text-ink-soft font-semibold uppercase tracking-widest">{item.label}</span>
-              <span className="text-sm font-bold text-ink">{item.value}</span>
-            </motion.div>
-          ))}
-        </div>
-      ),
-    },
-    {
-      num: "03",
-      title: "Forms Auto-Filled",
-      icon: CheckCircle,
-      content: (
-        <div className="mt-3 p-4 rounded-xl bg-green-50 border border-green-200 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center shrink-0">
-            <Check className="w-5 h-5 text-white" strokeWidth={3} />
-          </div>
-          <div>
-            <div className="text-sm font-bold text-green-800">12 forms completed</div>
-            <div className="text-[11px] text-green-600">All fields filled, zero errors</div>
-          </div>
-        </div>
-      ),
-    },
+  const [activeStep, setActiveStep] = useState(0);
+  const [extractedCount, setExtractedCount] = useState(0);
+  const [filledCount, setFilledCount] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+
+  const pdfs = [
+    { name: "listing_agreement.pdf",   size: "2.4 MB", color: "text-red-500",    bg: "bg-red-50",    border: "border-red-100" },
+    { name: "seller_disclosure.pdf",   size: "1.8 MB", color: "text-orange-500", bg: "bg-orange-50", border: "border-orange-100" },
+    { name: "iabs_form.pdf",           size: "0.9 MB", color: "text-amber-500",  bg: "bg-amber-50",  border: "border-amber-100" },
+    { name: "hoa_addendum.pdf",        size: "1.1 MB", color: "text-blue-500",   bg: "bg-blue-50",   border: "border-blue-100" },
+    { name: "lead_paint_disclosure.pdf", size: "0.6 MB", color: "text-green-500", bg: "bg-green-50", border: "border-green-100" },
+  ];
+
+  const extractedFields = [
+    { label: "Seller Name",       value: "Bhatnagar Living Trust" },
+    { label: "Property Address",  value: "1284 Oak Ridge Way, Austin TX" },
+    { label: "Listing Price",     value: "$1,840,000" },
+    { label: "Commission",        value: "2.5% Buyer Agency" },
+    { label: "Square Footage",    value: "3,420 sq ft" },
+    { label: "Year Built",        value: "2018" },
+    { label: "Bedrooms",          value: "4" },
+    { label: "Bathrooms",         value: "3.5" },
+    { label: "HOA Fees",          value: "$285/month" },
+    { label: "Tax ID",            value: "82-194-0041" },
+  ];
+
+  const completedForms = [
+    "Listing Agreement",
+    "Seller Disclosure",
+    "IABS Form",
+    "Lead Paint Disclosure",
+    "HOA Addendum",
+    "Commission Agreement",
+    "MLS Input Sheet",
+    "Earnest Money Receipt",
+    "Title Commitment",
+    "Showing Instructions",
+    "Lockbox Authorization",
+    "Property Survey",
+  ];
+
+  function runDemo() {
+    if (isRunning) return;
+    setIsRunning(true);
+    setActiveStep(0);
+    setExtractedCount(0);
+    setFilledCount(0);
+
+    // Step 1 → Step 2 after 1.8s
+    setTimeout(() => setActiveStep(1), 1800);
+
+    // Extract fields one by one starting at 2s
+    extractedFields.forEach((_, i) => {
+      setTimeout(() => setExtractedCount(i + 1), 2000 + i * 180);
+    });
+
+    // Step 3 after extraction done
+    setTimeout(() => setActiveStep(2), 2000 + extractedFields.length * 180 + 400);
+
+    // Fill forms one by one
+    completedForms.forEach((_, i) => {
+      setTimeout(() => setFilledCount(i + 1), 2000 + extractedFields.length * 180 + 600 + i * 120);
+    });
+
+    // Done
+    setTimeout(() => {
+      setActiveStep(3);
+      setIsRunning(false);
+    }, 2000 + extractedFields.length * 180 + 600 + completedForms.length * 120 + 400);
+  }
+
+  // Auto-start on mount
+  useEffect(() => {
+    const t = setTimeout(runDemo, 800);
+    return () => clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const stepDefs = [
+    { num: "01", label: "Upload Documents" },
+    { num: "02", label: "AI Extracts Data" },
+    { num: "03", label: "Forms Auto-Filled" },
+    { num: "04", label: "Ready to Publish" },
   ];
 
   return (
-    <section className="py-20 sm:py-28 px-4 sm:px-6 bg-white">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-14 space-y-4">
+    <section className="py-16 sm:py-24 px-4 sm:px-6 bg-white">
+      <div className="max-w-6xl mx-auto">
+
+        {/* Header */}
+        <div className="text-center mb-10 space-y-3">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -331,36 +593,175 @@ function InstantDemoSection() {
           >
             Watch it work in real-time.
           </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-ink-soft text-base max-w-lg mx-auto"
+          >
+            Upload 5 PDFs. RIA extracts every field and fills 12 forms automatically.
+          </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-          {steps.map((step, i) => (
-            <div key={i} className="relative flex flex-col">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.15 }}
-                className="bg-white rounded-3xl border border-border shadow-soft p-6 flex-1"
-              >
-                <div className="flex items-center gap-3 mb-1">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-brand-blue">{step.num}</span>
-                  <div className="w-8 h-8 rounded-xl bg-brand-blue/10 flex items-center justify-center">
-                    <step.icon className="w-4 h-4 text-brand-blue" />
-                  </div>
+        {/* Progress pipeline */}
+        <div className="flex items-center justify-center gap-0 mb-8 overflow-x-auto pb-2">
+          {stepDefs.map((s, i) => (
+            <div key={i} className="flex items-center shrink-0">
+              <div className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all duration-300 ${
+                activeStep > i ? "bg-green-50 border border-green-200" :
+                activeStep === i ? "bg-brand-blue/10 border border-brand-blue/20" :
+                "bg-muted/40 border border-border/40"
+              }`}>
+                <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black transition-all ${
+                  activeStep > i ? "bg-green-500 text-white" :
+                  activeStep === i ? "bg-brand-blue text-white" :
+                  "bg-border text-ink-soft"
+                }`}>
+                  {activeStep > i ? (
+                    <Check className="w-3 h-3" strokeWidth={3} />
+                  ) : s.num}
                 </div>
-                <h3 className="text-lg font-display font-bold text-ink mt-2">{step.title}</h3>
-                {step.content}
-              </motion.div>
-              {/* Arrow connector */}
-              {i < steps.length - 1 && (
-                <div className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-brand-blue/10 border border-brand-blue/20 items-center justify-center">
-                  <ArrowRight className="w-3 h-3 text-brand-blue" />
-                </div>
+                <span className={`text-[11px] font-bold uppercase tracking-widest whitespace-nowrap ${
+                  activeStep > i ? "text-green-700" :
+                  activeStep === i ? "text-brand-blue" :
+                  "text-ink-soft/50"
+                }`}>{s.label}</span>
+              </div>
+              {i < stepDefs.length - 1 && (
+                <div className={`w-6 h-px mx-1 transition-colors duration-500 ${activeStep > i ? "bg-green-300" : "bg-border"}`} />
               )}
             </div>
           ))}
         </div>
+
+        {/* Main demo panel */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+          {/* Panel 1: PDF Upload */}
+          <div className="bg-white rounded-2xl border border-border shadow-soft overflow-hidden">
+            <div className="px-4 py-3 border-b border-border bg-muted/30 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full transition-colors ${activeStep >= 0 ? "bg-green-500" : "bg-border"}`} />
+                <span className="text-[10px] font-black uppercase tracking-widest text-ink-soft">Documents Uploaded</span>
+              </div>
+              <span className="text-[10px] font-black text-brand-blue">{pdfs.length} / {pdfs.length}</span>
+            </div>
+            <div className="p-4 space-y-2">
+              {pdfs.map((pdf, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -12 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.12, type: "spring", stiffness: 200, damping: 20 }}
+                  className="flex items-center gap-3 p-2.5 rounded-xl bg-muted/30 border border-border/50 group hover:bg-muted/60 transition-colors"
+                >
+                  <div className={`w-8 h-8 rounded-lg ${pdf.bg} ${pdf.border} border flex items-center justify-center shrink-0`}>
+                    <FileText className={`w-4 h-4 ${pdf.color}`} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-semibold text-ink truncate">{pdf.name}</div>
+                    <div className="text-[10px] text-ink-soft">{pdf.size}</div>
+                  </div>
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: i * 0.12 + 0.3, type: "spring", stiffness: 300 }}
+                  >
+                    <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />
+                  </motion.div>
+                </motion.div>
+              ))}
+            </div>
+            {/* Total size */}
+            <div className="px-4 pb-4">
+              <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-brand-blue/5 border border-brand-blue/10">
+                <span className="text-[10px] text-brand-blue font-bold uppercase tracking-widest">Total</span>
+                <span className="text-[10px] font-black text-brand-blue">6.8 MB · 5 files</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Panel 2: Extracted Fields */}
+          <div className="bg-white rounded-2xl border border-border shadow-soft overflow-hidden">
+            <div className="px-4 py-3 border-b border-border bg-muted/30 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full transition-colors ${activeStep >= 1 ? "bg-green-500 animate-pulse" : "bg-border"}`} />
+                <span className="text-[10px] font-black uppercase tracking-widest text-ink-soft">Fields Extracted</span>
+              </div>
+              <motion.span
+                key={extractedCount}
+                initial={{ scale: 1.3 }}
+                animate={{ scale: 1 }}
+                className="text-[10px] font-black text-brand-blue"
+              >
+                {extractedCount} / {extractedFields.length}
+              </motion.span>
+            </div>
+            <div className="divide-y divide-border/30">
+              {extractedFields.map((field, i) => (
+                <div key={i} className="flex items-center justify-between px-4 py-2.5 relative overflow-hidden">
+                  {/* Fill bar */}
+                  <AnimatePresence>
+                    {i < extractedCount && (
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: "100%" }}
+                        transition={{ duration: 0.3 }}
+                        className="absolute inset-0 bg-brand-blue/4"
+                      />
+                    )}
+                  </AnimatePresence>
+                  <span className="relative text-[10px] text-ink-soft font-semibold uppercase tracking-widest">{field.label}</span>
+                  <AnimatePresence mode="wait">
+                    {i < extractedCount ? (
+                      <motion.span
+                        key="val"
+                        initial={{ opacity: 0, x: 8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="relative text-xs font-bold text-ink"
+                      >
+                        {field.value}
+                      </motion.span>
+                    ) : (
+                      <motion.div
+                        key="empty"
+                        animate={activeStep >= 1 && i === extractedCount ? { opacity: [0.3, 0.8, 0.3] } : {}}
+                        transition={{ duration: 0.6, repeat: Infinity }}
+                        className="relative w-20 h-2.5 rounded bg-muted"
+                      />
+                    )}
+                  </AnimatePresence>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Panel 3: Live Form Filling */}
+          <FormFillingPanel
+            activeStep={activeStep}
+            filledCount={filledCount}
+            completedForms={completedForms}
+          />
+        </div>
+
+        {/* Replay button */}
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={runDemo}
+            disabled={isRunning}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-white text-sm font-semibold text-ink-soft hover:text-ink hover:border-ink/20 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <motion.div
+              animate={isRunning ? { rotate: 360 } : {}}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            >
+              <RefreshCw className="w-4 h-4" />
+            </motion.div>
+            {isRunning ? "Processing..." : "Run Demo Again"}
+          </button>
+        </div>
+
       </div>
     </section>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -14,6 +14,7 @@ import {
   Check,
   Star,
   ChevronRight,
+  ChevronDown,
 } from "lucide-react";
 import { useBooking } from "../context/BookingContext";
 
@@ -44,7 +45,7 @@ function StagingNavbar() {
         </div>
         <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-muted">
           <span className="w-1.5 h-1.5 rounded-full bg-brand-purple animate-pulse" />
-          <span className="text-[11px] font-black uppercase tracking-widest text-ink-soft">Virtual Staging AI</span>
+          <span className="text-[11px] font-black uppercase tracking-widest text-ink-soft">RIA Virtual Staging</span>
         </div>
         <button
           onClick={openModal}
@@ -60,20 +61,51 @@ function StagingNavbar() {
 // ─── BEFORE/AFTER SLIDER ──────────────────────────────────────────────────────
 function BeforeAfterSlider() {
   const [sliderPos, setSliderPos] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
+  const dirRef = useRef(1);
+  const pauseRef = useRef(false);
+
+  // Auto-slide back and forth
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (pauseRef.current) return;
+      setSliderPos((p) => {
+        const next = p + dirRef.current * 0.5;
+        if (next >= 85) { dirRef.current = -1; return 85; }
+        if (next <= 15) { dirRef.current = 1;  return 15; }
+        return next;
+      });
+    }, 20);
+    return () => clearInterval(id);
+  }, []);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    pauseRef.current = true;
+    setIsDragging(true);
+    setSliderPos(Number(e.target.value));
+  }
+
+  function handleRelease() {
+    setIsDragging(false);
+    // Resume auto-slide after 2s of inactivity
+    setTimeout(() => { pauseRef.current = false; }, 2000);
+  }
   return (
     <div className="relative rounded-3xl overflow-hidden aspect-[4/3] select-none shadow-heavy">
-      {/* Before image */}
+      {/* Before image — empty room with vertical blinds */}
       <img
-        src="https://picsum.photos/seed/empty-room/800/600"
-        alt="Empty room"
-        referrerPolicy="no-referrer"
+        src="/Before image.webp"
+        alt="Empty room before staging"
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover"
       />
-      {/* After image clipped */}
+      {/* After image clipped — same room AI staged */}
       <img
-        src="https://picsum.photos/seed/staged-room/800/600"
-        alt="Staged room"
-        referrerPolicy="no-referrer"
+        src="/after image.webp"
+        alt="Room after AI virtual staging"
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover"
         style={{ clipPath: `inset(0 0 0 ${sliderPos}%)` }}
       />
@@ -95,7 +127,9 @@ function BeforeAfterSlider() {
         min={0}
         max={100}
         value={sliderPos}
-        onChange={(e) => setSliderPos(Number(e.target.value))}
+        onChange={handleChange}
+        onMouseUp={handleRelease}
+        onTouchEnd={handleRelease}
         className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-20"
         aria-label="Before/after slider"
       />
@@ -204,8 +238,8 @@ function InstantResultsSection() {
     {
       title: "Empty Room Staged",
       desc: "AI adds furniture, decor, and lighting that matches the space.",
-      before: "https://picsum.photos/seed/empty-living/800/600",
-      after: "https://picsum.photos/seed/furnished-room/800/600",
+      before: "/Before image.webp",
+      after: "/after image.webp",
       badge: "AI Staged",
       accent: "bg-brand-purple",
       accentText: "text-brand-purple",
@@ -215,8 +249,8 @@ function InstantResultsSection() {
     {
       title: "Day to Dusk",
       desc: "Transform daytime exterior shots into golden-hour magic.",
-      before: "https://picsum.photos/seed/day-exterior/800/600",
-      after: "https://picsum.photos/seed/dusk-exterior/800/600",
+      before: "/before-dusk-new.webp",
+      after: "/os-dusk-new.webp",
       badge: "Day to Dusk",
       accent: "bg-brand-blue",
       accentText: "text-brand-blue",
@@ -226,8 +260,8 @@ function InstantResultsSection() {
     {
       title: "Exterior Enhanced",
       desc: "Remove clutter, improve landscaping, and boost curb appeal.",
-      before: "https://picsum.photos/seed/plain-exterior/800/600",
-      after: "https://picsum.photos/seed/enhanced-exterior/800/600",
+      before: "/grassbefore.webp",
+      after: "/grassafter.webp",
       badge: "Enhanced",
       accent: "bg-brand-teal",
       accentText: "text-brand-teal",
@@ -274,6 +308,8 @@ function InstantResultsSection() {
                   src={card.before}
                   alt={`Before: ${card.title}`}
                   referrerPolicy="no-referrer"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full aspect-[4/3] object-cover"
                 />
                 <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/50 backdrop-blur-sm text-white text-[10px] font-bold">
@@ -291,6 +327,8 @@ function InstantResultsSection() {
                   src={card.after}
                   alt={`After: ${card.title}`}
                   referrerPolicy="no-referrer"
+                  loading="lazy"
+                  decoding="async"
                   className="w-full aspect-[4/3] object-cover"
                 />
                 <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/50 backdrop-blur-sm text-white text-[10px] font-bold">
@@ -519,22 +557,87 @@ function WorkflowSection() {
 
 // ─── PRODUCT UI MOCK SECTION ──────────────────────────────────────────────────
 function ProductUIMockSection() {
-  const styles = ["Modern", "Scandinavian", "Luxury", "Minimalist"];
-  const [activeStyle, setActiveStyle] = useState("Modern");
+  const tools = [
+    { id: "staging",    label: "Virtual Staging",      icon: Layers },
+    { id: "enhance",   label: "Image Enhancement",     icon: Sparkles },
+    { id: "dusk",      label: "Day to Dusk",           icon: Sun },
+    { id: "removal",   label: "Virtual Item Removal",  icon: Eraser },
+  ];
+
+  const stagingStyles = [
+    "Modern Horizon", "Standard Harmony",
+    "Industrial Loft", "Farmhouse Heritage",
+    "Luxury Prestige", "Scandinavian Airy",
+    "Coastal Breeze",  "Designer's Choice",
+  ];
+
+  const lightingOptions = ["Soft Natural", "Bright Daylight", "Warm Evening", "Studio White"];
+
+  // Real estate empty room images (Unsplash)
+  const roomImages: Record<string, { empty: string; staged: string; label: string }> = {
+    staging: {
+      empty:  "/main virtual-stage  before.webp",
+      staged: "/main virtual-stage  after.webp",
+      label:  "Living Room",
+    },
+    enhance: {
+      empty:  "/ai enhance before.webp",
+      staged: "/os-enhanced-new.webp",
+      label:  "Kitchen",
+    },
+    dusk: {
+      empty:  "/before-dusk-new.webp",
+      staged: "/os-dusk-new.webp",
+      label:  "Exterior",
+    },
+    removal: {
+      empty:  "/grassbefore.webp",
+      staged: "/grassafter.webp",
+      label:  "Exterior",
+    },
+  };
+
+  // Variation thumbnails per tool (real estate images)
+  const variations: Record<string, string[]> = {
+    staging: [
+      "/variation 1.webp",
+      "/variation 2.webp",
+      "/variation 3.webp",
+    ],
+    enhance: [],
+    dusk: [],
+    removal: [],
+  };
+
+  const [activeTool, setActiveTool] = useState("staging");
+  const [activeStyle, setActiveStyle] = useState("Modern Horizon");
+  const [activeLighting, setActiveLighting] = useState("Soft Natural");
+  const [sliderPos, setSliderPos] = useState(50);
   const [generating, setGenerating] = useState(false);
-
-  useEffect(() => {
-    setGenerating(true);
-    const t = setTimeout(() => setGenerating(false), 1500);
-    return () => clearTimeout(t);
-  }, [activeStyle]);
-
+  const [generated, setGenerated] = useState(false);
   const { openModal } = useBooking();
 
+  const room = roomImages[activeTool];
+
+  function handleGenerate() {
+    setGenerating(true);
+    setGenerated(false);
+    setTimeout(() => { setGenerating(false); setGenerated(true); }, 1800);
+  }
+
+  // Auto-generate on tool/style change
+  useEffect(() => {
+    setGenerated(false);
+    setSliderPos(50);
+    const t = setTimeout(handleGenerate, 400);
+    return () => clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTool, activeStyle]);
+
   return (
-    <section className="py-20 sm:py-28 px-4 sm:px-6 bg-white">
+    <section className="py-16 sm:py-24 px-4 sm:px-6 bg-white">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-14 space-y-4">
+        <div className="text-center mb-10 space-y-3">
           <motion.h2
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -543,100 +646,352 @@ function ProductUIMockSection() {
           >
             Designed for agents, not designers.
           </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.05 }}
+            className="text-ink-soft text-base max-w-lg mx-auto"
+          >
+            Select a tool, choose a style, and watch RIA transform your listing photos instantly.
+          </motion.p>
         </div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="rounded-3xl overflow-hidden border border-border shadow-elevated bg-white"
         >
-          {/* App header bar */}
-          <div className="flex items-center gap-3 px-5 py-3.5 border-b border-border bg-muted">
+          {/* App header */}
+          <div className="flex items-center gap-3 px-5 py-3 border-b border-border bg-muted/50">
             <div className="flex gap-1.5">
-              <div className="w-3 h-3 rounded-full bg-red-500/70" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
-              <div className="w-3 h-3 rounded-full bg-green-500/70" />
+              <div className="w-3 h-3 rounded-full bg-red-400/70" />
+              <div className="w-3 h-3 rounded-full bg-yellow-400/70" />
+              <div className="w-3 h-3 rounded-full bg-green-400/70" />
             </div>
-            <span className="text-[11px] text-ink-soft font-mono uppercase tracking-widest mx-auto">Virtual Staging AI</span>
+            <span className="text-[11px] text-ink-soft font-mono uppercase tracking-widest mx-auto">RIA Virtual Staging</span>
           </div>
-          {/* App body */}
-          <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_180px]">
-            {/* Left sidebar: style selector */}
-            <div className="border-b lg:border-b-0 lg:border-r border-border p-4 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible bg-muted/40">
-              <div className="text-[10px] text-ink-soft font-black uppercase tracking-widest mb-1 shrink-0 hidden lg:block">Style</div>
-              {styles.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setActiveStyle(s)}
-                  className={`shrink-0 px-3 py-2 rounded-xl text-xs font-semibold transition-all text-left ${
-                    activeStyle === s
-                      ? "bg-ink text-white"
-                      : "bg-muted text-ink-soft hover:bg-border hover:text-ink"
-                  }`}
-                >
-                  {s}
-                </button>
-              ))}
+
+          {/* 3-column layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-[180px_1fr_280px] min-h-[480px]">
+
+            {/* ── Left: Tool selector ── */}
+            <div className="border-b lg:border-b-0 lg:border-r border-border bg-muted/20 p-4 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible">
+              {tools.map((tool) => {
+                const isActive = activeTool === tool.id;
+                return (
+                  <button
+                    key={tool.id}
+                    onClick={() => setActiveTool(tool.id)}
+                    className={`shrink-0 lg:shrink-0 flex flex-col items-center gap-1.5 px-3 py-3 rounded-2xl border-2 text-center transition-all duration-200 ${
+                      isActive
+                        ? "border-brand-purple bg-brand-purple/5 shadow-soft"
+                        : "border-transparent hover:border-border hover:bg-muted/60"
+                    }`}
+                  >
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+                      isActive ? "bg-brand-purple/10 text-brand-purple" : "bg-muted text-ink-soft"
+                    }`}>
+                      <tool.icon className="w-4 h-4" />
+                    </div>
+                    <span className={`text-[10px] font-bold uppercase tracking-widest leading-tight text-center ${
+                      isActive ? "text-brand-purple" : "text-ink-soft"
+                    }`}>{tool.label}</span>
+                  </button>
+                );
+              })}
             </div>
-            {/* Center: image preview */}
-            <div className="relative p-4 bg-white">
-              <div className="relative rounded-2xl overflow-hidden aspect-[4/3]">
+
+            {/* ── Center: Before/After slider ── */}
+            <div className="p-4 bg-white flex flex-col gap-3">
+              {/* Room label */}
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-ink-soft"></span>
+                <span className="text-[10px] text-ink-soft/50 font-medium">Drag to compare</span>
+              </div>
+
+              {/* Slider */}
+              <div className="relative rounded-2xl overflow-hidden select-none flex-1 min-h-[300px] sm:min-h-[360px]">
+                {/* Empty room (before) */}
                 <img
-                  src="https://picsum.photos/seed/room-preview/1200/800"
-                  alt="Room preview"
+                  src={room.staged}
+                  alt={`Empty ${room.label}`}
                   referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
+
+                {/* Staged room (after) — clipped */}
                 <AnimatePresence>
-                  {generating && (
+                  {(generated || generating) && (
                     <motion.div
-                      key="generating"
+                      key={activeTool + activeStyle}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3"
+                      className="absolute inset-0"
+                      style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
                     >
-                      <div className="w-8 h-8 rounded-full border-2 border-brand-purple border-t-transparent animate-spin" />
-                      <span className="text-ink text-sm font-semibold">Generating...</span>
-                      <span className="text-ink-soft text-xs">{activeStyle} style</span>
+                      <img
+                        src={room.empty}
+                        alt={`Staged ${room.label}`}
+                        referrerPolicy="no-referrer"
+                        loading="lazy"
+                        decoding="async"
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
                     </motion.div>
                   )}
                 </AnimatePresence>
+
+                {/* Generating overlay */}
+                <AnimatePresence>
+                  {generating && (
+                    <motion.div
+                      key="gen"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute inset-0 bg-white/70 backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-20"
+                    >
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        className="w-10 h-10 rounded-full border-3 border-brand-purple border-t-transparent"
+                        style={{ borderWidth: 3 }}
+                      />
+                      <span className="text-sm font-semibold text-ink">Generating {activeStyle}...</span>
+                      <div className="w-32 h-1 rounded-full bg-muted overflow-hidden">
+                        <motion.div
+                          initial={{ width: "0%" }}
+                          animate={{ width: "100%" }}
+                          transition={{ duration: 1.8, ease: "easeInOut" }}
+                          className="h-full bg-brand-purple rounded-full"
+                        />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Drag handle */}
+                {generated && !generating && (
+                  <>
+                    <div
+                      className="absolute top-0 bottom-0 w-0.5 bg-white shadow-heavy z-10 pointer-events-none"
+                      style={{ left: `${sliderPos}%` }}
+                    >
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow-heavy border border-border flex items-center justify-center">
+                        <div className="flex gap-0.5">
+                          <div className="w-0.5 h-3 bg-ink/30 rounded-full" />
+                          <div className="w-0.5 h-3 bg-ink/30 rounded-full" />
+                        </div>
+                      </div>
+                    </div>
+                    <input
+                      type="range" min={0} max={100} value={sliderPos}
+                      onChange={(e) => setSliderPos(Number(e.target.value))}
+                      aria-label="Before/after comparison slider"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-20"
+                    />
+                  </>
+                )}
+
+                {/* Labels */}
+                <div className="absolute bottom-3 left-3 z-10 px-2 py-1 rounded-lg bg-black/50 backdrop-blur-sm text-white text-[10px] font-bold">Before</div>
+                {generated && !generating && (
+                  <div className="absolute bottom-3 right-3 z-10 px-2 py-1 rounded-lg bg-brand-purple/80 backdrop-blur-sm text-white text-[10px] font-bold">
+                    {activeStyle}
+                  </div>
+                )}
               </div>
-              {/* Bottom bar */}
-              <div className="flex items-center justify-between mt-3 gap-3">
-                <span className="text-ink-soft text-xs font-medium">3 images generated</span>
-                <button
-                  onClick={openModal}
-                  className="px-4 py-2 rounded-xl bg-brand-purple text-white text-xs font-bold hover:opacity-90 transition-all"
-                >
-                  Generate Variations
-                </button>
+
+              {/* Bottom bar: variations + generate */}
+              <div className="space-y-3">
+                {/* Variation thumbnails — only for Virtual Staging */}
+                {generated && !generating && activeTool === "staging" && (variations[activeTool] ?? []).length > 0 && (
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="text-[10px] font-black uppercase tracking-widest text-ink-soft">Variations</div>
+                      <span className="text-[10px] font-bold text-brand-purple">3 ready</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {(variations[activeTool] ?? []).map((src, vi) => (
+                        <motion.div
+                          key={`${activeTool}-${vi}`}
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: vi * 0.1, type: "spring", stiffness: 200 }}
+                          className="relative rounded-xl overflow-hidden aspect-video group cursor-pointer"
+                          onClick={openModal}
+                        >
+                          <img
+                            src={src}
+                            alt={`Variation ${vi + 1}`}
+                            referrerPolicy="no-referrer"
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                           </div>
+                          <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/40 backdrop-blur-sm text-white text-[9px] font-bold">
+                            V{vi + 1}
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-            {/* Right panel: variations */}
-            <div className="border-t lg:border-t-0 lg:border-l border-border p-4 flex flex-row lg:flex-col gap-3 overflow-x-auto lg:overflow-x-visible bg-muted/40">
-              <div className="text-[10px] text-ink-soft font-black uppercase tracking-widest mb-1 shrink-0 hidden lg:block">Variations</div>
-              {["var1", "var2", "var3"].map((seed, vi) => (
-                <div key={vi} className="shrink-0 lg:shrink group">
-                  <div className="relative rounded-xl overflow-hidden aspect-[4/3]">
-                    <img
-                      src={`https://picsum.photos/seed/${seed}/400/300`}
-                      alt={`Variation ${vi + 1}`}
-                      referrerPolicy="no-referrer"
-                      className="w-full h-full object-cover"
-                    />
-                    <button
-                      onClick={openModal}
-                      className="absolute inset-0 bg-ink/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
-                      aria-label={`Download variation ${vi + 1}`}
-                    >
-                      <Download className="w-4 h-4 text-white" />
-                    </button>
+
+            {/* ── Right: Controls + Variations ── */}
+            <div className="border-t lg:border-t-0 lg:border-l border-border bg-white flex flex-col">
+
+              {/* Tool title */}
+              <div className="px-5 pt-5 pb-3 border-b border-border/40">
+                <div className="font-display font-bold text-ink text-base leading-tight">
+                  {tools.find((t) => t.id === activeTool)?.label}
+                </div>
+                <p className="text-[11px] text-ink-soft mt-0.5">
+                  {activeTool === "staging"  && "Transform empty spaces into inviting homes."}
+                  {activeTool === "enhance"  && "Enhance lighting, color, and sharpness."}
+                  {activeTool === "dusk"     && "Convert daytime shots to golden-hour magic."}
+                  {activeTool === "removal"  && "Remove furniture for a clean, empty space."}
+                </p>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ maxHeight: "460px" }} data-lenis-prevent>
+                {/* Room type (staging only) */}
+                {activeTool === "staging" && (
+                  <div>
+                    <div className="text-[10px] font-black uppercase tracking-widest text-ink-soft mb-2">Room Type</div>
+                    <div className="flex items-center justify-between px-3 py-2.5 rounded-xl border border-border bg-muted/30 text-sm font-medium text-ink cursor-pointer hover:bg-muted/60 transition-colors">
+                      <span>{room.label}</span>
+                      <ChevronDown className="w-4 h-4 text-ink-soft" />
+                    </div>
+                    <p className="text-[10px] text-ink-soft/60 mt-1">From listing label or choose to override</p>
+                  </div>
+                )}
+
+                {/* Staging style */}
+                {activeTool === "staging" && (
+                  <div>
+                    <div className="text-[10px] font-black uppercase tracking-widest text-ink-soft mb-2">Staging Style</div>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {stagingStyles.map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => setActiveStyle(s)}
+                          className={`px-2.5 py-2 rounded-xl text-[11px] font-semibold text-center transition-all ${
+                            activeStyle === s
+                              ? "bg-brand-purple text-white shadow-soft"
+                              : "bg-muted/40 text-ink-soft hover:bg-muted hover:text-ink border border-border/40"
+                          }`}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Lighting */}
+                <div>
+                  <div className="text-[10px] font-black uppercase tracking-widest text-ink-soft mb-2">Lighting</div>
+                  <div className="flex items-center justify-between px-3 py-2.5 rounded-xl border border-border bg-muted/30 text-sm font-medium text-ink cursor-pointer hover:bg-muted/60 transition-colors">
+                    <span>{activeLighting}</span>
+                    <ChevronDown className="w-4 h-4 text-ink-soft" />
+                  </div>
+                  <div className="flex gap-1.5 mt-2 flex-wrap">
+                    {lightingOptions.map((l) => (
+                      <button
+                        key={l}
+                        onClick={() => setActiveLighting(l)}
+                        className={`px-2 py-1 rounded-lg text-[10px] font-semibold transition-all ${
+                          activeLighting === l
+                            ? "bg-brand-purple/10 text-brand-purple border border-brand-purple/20"
+                            : "bg-muted/40 text-ink-soft hover:bg-muted border border-transparent"
+                        }`}
+                      >
+                        {l}
+                      </button>
+                    ))}
                   </div>
                 </div>
-              ))}
+
+                {/* Custom Instructions */}
+                <div>
+                  <div className="text-[10px] font-black uppercase tracking-widest text-ink-soft mb-2">Custom Instructions</div>
+                  <textarea
+                    rows={3}
+                    placeholder="e.g. Add velvet sofa, marble coffee table..."
+                    className="w-full px-3 py-2.5 rounded-xl border border-border bg-muted/30 text-xs text-ink placeholder:text-ink-soft/50 resize-none outline-none focus:border-brand-purple/40 focus:bg-white transition-colors"
+                  />
+                </div>
+
+                {/* What RIA Does */}
+                <div>
+                  <div className="text-[10px] font-black uppercase tracking-widest text-ink-soft mb-2">What RIA Does</div>
+                  <div className="space-y-1.5">
+                    {[
+                      "AI-powered furniture placement",
+                      "Style-matched decor",
+                      "Realistic lighting & shadows",
+                    ].map((item, i) => (
+                      <div key={i} className="flex items-center gap-2">
+                        <div className="w-4 h-4 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                          <Check className="w-2.5 h-2.5 text-green-600" strokeWidth={3} />
+                        </div>
+                        <span className="text-[11px] text-ink-soft font-medium">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Market Insight */}
+                <div className="p-3 rounded-xl bg-brand-blue/5 border border-brand-blue/15">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <span className="text-[9px] font-black uppercase tracking-widest text-brand-blue">Market Insight</span>
+                  </div>
+                  <p className="text-[11px] text-ink leading-relaxed">
+                    Virtually staged listings receive{" "}
+                    <span className="font-bold text-brand-blue">40% more online views</span>{" "}
+                    than empty ones.
+                  </p>
+                </div>
+
+              </div>
+
+              {/* Generate button — only for Virtual Staging */}
+              {activeTool === "staging" && (
+              <div className="p-4 border-t border-border/40">
+                <button
+                  onClick={handleGenerate}
+                  disabled={generating}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-brand-purple text-white text-sm font-bold hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-soft"
+                >
+                  {generating ? (
+                    <>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        className="w-4 h-4 rounded-full border-2 border-white border-t-transparent"
+                      />
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4" />
+                      Generate New Variation
+                    </>
+                  )}
+                </button>
+              </div>
+              )}
             </div>
+
           </div>
         </motion.div>
       </div>
