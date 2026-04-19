@@ -485,7 +485,7 @@ export default function TransactionFlow() {
   };
 
   return (
-    <section className="py-24 sm:py-32 px-4 sm:px-6 bg-muted/30 relative overflow-hidden">
+    <section className="py-24 sm:py-32 px-4 sm:px-6 bg-muted/30 relative overflow-hidden hidden">
       <div className="absolute inset-0 grid-bg opacity-[0.2] pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-mesh opacity-30 pointer-events-none" />
 

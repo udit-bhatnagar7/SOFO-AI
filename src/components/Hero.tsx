@@ -150,12 +150,6 @@ export default function Hero() {
               <Calendar className="h-4 w-4 opacity-70" /> Book a Demo <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </button>
             <button
-              onClick={() => { window.location.hash = "#/staging"; }}
-              className="inline-flex items-center gap-2.5 rounded-2xl border border-border bg-white text-ink text-sm font-bold px-6 py-3.5 hover:bg-muted transition-all w-full sm:w-auto justify-center"
-            >
-              <Layers className="h-4 w-4 text-brand-purple" /> Try Virtual Staging
-            </button>
-            <button
               onClick={openVideo}
               className="inline-flex items-center gap-2.5 rounded-2xl border border-border bg-white text-ink text-sm font-bold px-6 py-3.5 hover:bg-muted transition-all w-full sm:w-auto justify-center"
             >
@@ -201,10 +195,10 @@ export default function Hero() {
 
                 <div className="flex p-1 bg-muted/40 border border-border/40 rounded-xl overflow-x-auto" role="tablist" aria-label="Workspace mode">
                   {[
-                    { id: "extraction",  icon: FileText,    label: "Listing" },
-                    { id: "staging",     icon: Layout,      label: "Staging" },
-                    { id: "transaction", icon: ShieldCheck, label: "Transaction" },
-                    { id: "marketing",   icon: Megaphone,   label: "Marketing" },
+                    { id: "extraction",  icon: FileText,    label: "Listing Manager" },
+                    { id: "staging",     icon: Layout,      label: "Virtual Staging" },
+                    { id: "transaction", icon: ShieldCheck, label: "Transaction Manager" },
+                    { id: "marketing",   icon: Megaphone,   label: "Marketing Automation" },
                    ].map((station) => (
                     <button
                       key={station.id}
@@ -298,53 +292,28 @@ export default function Hero() {
                  {/* Workspace 02: Virtual Staging AI */}
                  <div className="w-1/4 flex-shrink-0 h-full p-0 flex">
                     <div className="flex-1 relative overflow-hidden group flex">
-                       {/* Left Side: Empty Room */}
-                       <div className="flex-1 relative border-r border-white/10 overflow-hidden">
+
+                       {/* Left Side: Before (Empty Room) */}
+                       <div className="flex-1 relative border-r border-white/20 overflow-hidden">
                           <img 
-                             src="https://images.unsplash.com/photo-1549517045-bc93de075e53?q=75&w=1200&auto=format&fit=crop" 
+                             src="/Before image.webp"
                              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                              alt="Empty Room"
-                             referrerPolicy="no-referrer"
                              loading="lazy"
                              decoding="async"
                           />
-                          <div className="absolute top-8 left-8">
-                             <span className="px-3 py-1.5 rounded-lg bg-black/40 backdrop-blur-md border border-white/10 text-[9px] font-black text-white/70 uppercase tracking-widest">Original / Empty</span>
+                          {/* Dark overlay for readability */}
+                          <div className="absolute inset-0 bg-black/30" />
+                          {/* Top label */}
+                          <div className="absolute top-6 left-6 z-10">
+                             <span className="px-3 py-1.5 rounded-lg bg-black/50 backdrop-blur-md border border-white/20 text-[9px] font-black text-white/80 uppercase tracking-widest">
+                               Before · Empty
+                             </span>
                           </div>
-                       </div>
-
-                       {/* Right Side: Staged Room */}
-                       <div className="flex-1 relative overflow-hidden">
-                          <img 
-                             src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=75&w=1200&auto=format&fit=crop" 
-                             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                             alt="Staged Room"
-                             referrerPolicy="no-referrer"
-                             loading="lazy"
-                             decoding="async"
-                          />
-                          <div className="absolute top-8 right-8">
-                             <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-brand-blue/40 backdrop-blur-md border border-brand-blue/20">
-                                <Sparkles className="w-3 h-3 text-white" />
-                                <span className="text-[9px] font-black text-white uppercase tracking-widest">Agent Staged</span>
-                             </div>
-                          </div>
-                       </div>
-
-                       {/* Creative Mesh Overlay */}
-                       <div className="absolute inset-0 z-10 pointer-events-none">
-                          <div className="absolute inset-0 grid-bg opacity-30 invert" />
-                          <motion.div 
-                             animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.05, 1] }}
-                             transition={{ duration: 5, repeat: Infinity }}
-                             className="absolute inset-x-0 top-1/4 h-px bg-brand-blue shadow-[0_0_20px_rgba(59,130,246,0.5)]" 
-                          />
-                       </div>
-
-                       <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-ink/40 p-12 flex flex-col justify-between pointer-events-none">
-                          <div className="flex items-start justify-between pointer-events-auto">
-                             <div className="glass-card-dark p-4 rounded-xl border-white/10 shadow-heavy">
-                                <div className="text-[9px] font-black tracking-[0.2em] text-white/50 mb-3 underline decoration-white/20 underline-offset-4 uppercase">Staging Capabilities</div>
+                          {/* Bottom capabilities card */}
+                          <div className="absolute bottom-6 left-6 z-10">
+                             <div className="bg-black/50 backdrop-blur-md border border-white/15 rounded-xl p-4">
+                                <div className="text-[9px] font-black tracking-[0.2em] text-white/60 mb-3 uppercase">Staging Capabilities</div>
                                 <div className="space-y-2">
                                    {['Virtual Staging+', 'Day to Dusk', 'Exterior Enhance', 'Room Emptying'].map(feature => (
                                       <div key={feature} className="flex items-center gap-2">
@@ -354,30 +323,52 @@ export default function Hero() {
                                    ))}
                                 </div>
                              </div>
-                             
-                             <div className="w-44 h-9 glass-card-dark rounded-lg border-white/10 flex items-center justify-center gap-3">
+                          </div>
+                       </div>
+
+                       {/* Right Side: After (Staged Room) */}
+                       <div className="flex-1 relative overflow-hidden">
+                          <img 
+                             src="/after image.webp"
+                             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                             alt="Staged Room"
+                             loading="lazy"
+                             decoding="async"
+                          />
+                          {/* Subtle overlay only at bottom */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10" />
+                          {/* Top label */}
+                          <div className="absolute top-6 right-6 z-10">
+                             <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-brand-blue/70 backdrop-blur-md border border-brand-blue/40">
+                                <Sparkles className="w-3 h-3 text-white" />
+                                <span className="text-[9px] font-black text-white uppercase tracking-widest">Agent Staged</span>
+                             </div>
+                          </div>
+                          {/* AI active badge */}
+                          <div className="absolute top-14 right-6 z-10">
+                             <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/40 backdrop-blur-md border border-white/15">
                                 <motion.div 
                                    animate={{ scale: [1, 1.4, 1], opacity: [0.5, 1, 0.5] }}
                                    transition={{ duration: 2, repeat: Infinity }}
-                                   className="w-1.5 h-1.5 rounded-full bg-brand-blue shadow-[0_0_12px_#3b82f6]" 
-                                 />
-                                <span className="text-[8px] font-black text-white uppercase tracking-[0.3em]">AI RECONSTRUCTION Active</span>
+                                   className="w-1.5 h-1.5 rounded-full bg-brand-blue shadow-[0_0_8px_#3b82f6]" 
+                                />
+                                <span className="text-[8px] font-black text-white uppercase tracking-widest">AI Active</span>
                              </div>
                           </div>
-
-                          <div className="flex items-end justify-between pointer-events-auto">
-                             <div className="max-w-md text-left">
-                                <div className="inline-flex px-2 py-0.5 rounded bg-brand-blue/20 text-brand-blue text-[8px] font-black uppercase tracking-widest mb-4 border border-brand-blue/30 backdrop-blur">Visual Transformation</div>
-                                <p className="text-4xl font-display font-bold text-white mb-3 drop-shadow-lg">Virtual Staging AI</p>
-                                <p className="text-base text-white/90 leading-relaxed font-medium drop-shadow-md">
-                                   Enhance listing images: Virtual Staging, Day to Dusk transitions, Exterior Enhancement, and intelligent Room Emptying.
-                                </p>
+                          {/* Bottom text */}
+                          <div className="absolute bottom-6 left-6 right-6 z-10">
+                             <div className="inline-flex px-2 py-0.5 rounded bg-brand-blue/30 text-white text-[8px] font-black uppercase tracking-widest mb-3 border border-brand-blue/40 backdrop-blur">
+                               Visual Transformation
                              </div>
-                             <button className="h-14 w-14 rounded-2xl bg-brand-blue text-white shadow-[0_20px_40px_rgba(59,130,246,0.4)] hover:scale-105 transition-transform grid place-items-center">
-                                <Sparkles className="w-6 h-6" />
-                             </button>
+                             <p className="text-2xl font-display font-bold text-white mb-1 drop-shadow-lg">Virtual Staging AI</p>
+                             <p className="text-xs text-white/80 leading-relaxed font-medium drop-shadow-md">
+                               Enhance listing images instantly with AI.
+                             </p>
                           </div>
                        </div>
+
+                       {/* Center divider line */}
+                       <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px bg-white/30 z-20 pointer-events-none" />
                     </div>
                  </div>
 

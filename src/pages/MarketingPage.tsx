@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -18,11 +18,14 @@ import {
   Star,
   Zap,
   ArrowRight,
+  Clock,
+  AlertTriangle,
+  CheckCircle2,
 } from "lucide-react";
 import { useBooking } from "../context/BookingContext";
 import TransactionFlow from "../components/TransactionFlow";
 
-// â”€â”€â”€ NAVBAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── NAVBAR ───────────────────────────────────────────────────────────────────
 function MarketingNavbar() {
   const { openModal } = useBooking();
   return (
@@ -62,7 +65,7 @@ function MarketingNavbar() {
   );
 }
 
-// â”€â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── HERO ─────────────────────────────────────────────────────────────────────
 type Platform = "Instagram" | "Facebook" | "LinkedIn";
 
 const platformCaptions: Record<Platform, string> = {
@@ -254,7 +257,7 @@ function HeroSection() {
   );
 }
 
-// â”€â”€â”€ LIVE OUTPUT SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── LIVE OUTPUT SECTION ──────────────────────────────────────────────────────
 function LiveOutputSection() {
   const platformCards = [
     {
@@ -299,7 +302,7 @@ function LiveOutputSection() {
   ];
 
   return (
-    <section className="py-24 sm:py-32 px-4 sm:px-6 bg-white">
+    <section className="py-14 sm:py-20 px-4 sm:px-6 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16 space-y-4">
           <motion.div
@@ -342,11 +345,8 @@ function LiveOutputSection() {
               className="bg-white rounded-3xl border border-border shadow-elevated overflow-hidden"
             >
               {/* Colored gradient header */}
-              <div className={`h-32 w-full ${card.headerGradient} flex flex-col items-center justify-center relative`}>
+              <div className={`h-16 w-full ${card.headerGradient} flex flex-col items-center justify-center relative`}>
                 <span className="text-white font-display font-bold text-2xl">{card.name}</span>
-                <span className="mt-2 px-2.5 py-1 rounded-full bg-white/20 border border-white/30 text-white text-[10px] font-bold">
-                  AI Generated
-                </span>
               </div>
 
               <div className="p-6 space-y-4">
@@ -370,7 +370,7 @@ function LiveOutputSection() {
                 />
 
                 {/* Caption */}
-                <p className="text-sm text-ink leading-relaxed">
+                <p className="text-sm text-ink leading-relaxed min-h-[120px]">
                   {card.caption}
                   {card.hashtags && (
                     <span className="text-brand-teal ml-1">{card.hashtags}</span>
@@ -401,7 +401,133 @@ function LiveOutputSection() {
   );
 }
 
-// â”€â”€â”€ FEATURES SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+// --- TRANSACTION MANAGER PAIN POINTS ----------------------------------------
+
+function PainPointsSection() {
+  const problems = [
+    {
+      pain: "Writing listing copy from scratch every time",
+      detail: "Hours spent staring at a blank page crafting MLS descriptions, social captions, and email blasts for every single listing.",
+      fix: "Generates platform-ready copy in seconds � MLS, Instagram, Facebook, LinkedIn, and email, all from one upload.",
+    },
+    {
+      pain: "Inconsistent branding across platforms",
+      detail: "Each team member writes differently. Posts go out with mismatched tone, missing hashtags, or off-brand language.",
+      fix: "Every output follows your brand voice automatically. Consistent tone, approved hashtags, and on-brand messaging every time.",
+    },
+    {
+      pain: "Coordinating photos, copy & scheduling",
+      detail: "Juggling photographers, copywriters, and social schedulers means listings go live days late � costing you momentum.",
+      fix: "Upload photos once. Handles copy generation and formats content for every channel instantly, no coordination needed.",
+    },
+    {
+      pain: "Missing the first 48-hour listing window",
+      detail: "The first two days drive the most traffic. Delays in content creation mean you lose peak visibility and buyer interest.",
+      fix: "Go from new listing to fully published across all platforms in under 5 minutes � capturing the critical launch window.",
+    },
+  ];
+
+  return (
+    <section className="py-14 sm:py-20 px-4 sm:px-6 bg-[#f8fafb]">
+      <div className="max-w-7xl mx-auto">
+
+        {/* Header */}
+        <div className="text-center mb-16 space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-200 bg-red-50"
+          >
+            <AlertTriangle className="w-3.5 h-3.5 text-red-500" />
+            <span className="text-[11px] font-black uppercase tracking-[0.18em] text-red-500">The Real Problem</span>
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.05 }}
+            className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-ink tracking-tight"
+          >
+            What transaction managers deal with<br className="hidden sm:block" /> every single listing.
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-ink-soft text-lg max-w-2xl mx-auto"
+          >
+            The manual work is real. The bottlenecks are costly. Here's how SOFO AI eliminates them.
+          </motion.p>
+        </div>
+
+        {/* Row labels */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-3 px-1">
+          {problems.map((_, i) => (
+            <div key={i} />
+          ))}
+        </div>
+
+        {/* Row layout: badge full-width + cards */}
+        <div className="space-y-3">
+
+          {/* Row 1 badge */}
+          <div className="flex justify-center mb-8">
+            <div className="flex items-center gap-2 bg-red-50 border border-red-100 rounded-full px-4 py-2">
+              <Clock className="w-4 h-4 text-red-500 shrink-0" />
+              <span className="text-sm font-bold text-red-500">Without SOFO AI</span>
+            </div>
+          </div>
+
+          {/* Row 1 � Problems */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {problems.map((item, i) => (
+              <motion.div
+                key={`problem-${i}`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.07 }}
+                className="bg-white rounded-2xl border border-red-100 p-4"
+              >
+                <p className="text-sm font-semibold text-ink leading-snug mb-1">{item.pain}</p>
+                <p className="text-xs text-ink-soft leading-relaxed">{item.detail}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Row 2 badge */}
+          <div className="flex justify-center pt-4 mb-8">
+            <div className="flex items-center gap-2 bg-brand-teal/10 border border-brand-teal/20 rounded-full px-4 py-2">
+              <CheckCircle2 className="w-4 h-4 text-brand-teal shrink-0" />
+              <span className="text-sm font-bold text-brand-teal">With SOFO AI</span>
+            </div>
+          </div>
+
+          {/* Row 2 � Solutions */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {problems.map((item, i) => (
+              <motion.div
+                key={`fix-${i}`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.28 + i * 0.07 }}
+                className="bg-white rounded-2xl border border-brand-teal/20 p-4"
+              >
+                <p className="text-sm text-ink leading-relaxed">{item.fix}</p>
+              </motion.div>
+            ))}
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function FeaturesSection() {
   const features = [
     {
@@ -414,8 +540,8 @@ function FeaturesSection() {
       dotColor: "bg-brand-teal",
       statColor: "text-brand-teal",
       highlights: ["Instagram hashtags", "Facebook long-form", "LinkedIn professional", "Twitter/X concise"],
-      stat: "4 platforms",
-      statLabel: "supported",
+      stat: "4",
+      statLabel: "platforms",
     },
     {
       icon: Image,
@@ -459,7 +585,7 @@ function FeaturesSection() {
   ];
 
   return (
-    <section className="py-24 sm:py-32 px-4 sm:px-6 bg-muted/30 relative overflow-hidden">
+    <section className="py-14 sm:py-20 px-4 sm:px-6 bg-muted/30 relative overflow-hidden">
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-16 space-y-4">
           <motion.div
@@ -510,7 +636,7 @@ function FeaturesSection() {
               </div>
 
               <h3 className="text-ink font-display font-bold text-xl mb-2">{feat.title}</h3>
-              <p className="text-ink-soft text-sm leading-relaxed mb-5">{feat.desc}</p>
+              <p className="text-ink-soft text-sm leading-relaxed mb-5 min-h-[60px]">{feat.desc}</p>
 
               <ul className="space-y-2.5 mb-6">
                 {feat.highlights.map((h, hi) => (
@@ -533,7 +659,7 @@ function FeaturesSection() {
   );
 }
 
-// â”€â”€â”€ WORKFLOW SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── WORKFLOW SECTION ─────────────────────────────────────────────────────────
 function WorkflowSection() {
   const steps = [
     {
@@ -563,7 +689,7 @@ function WorkflowSection() {
   ];
 
   return (
-    <section className="py-24 sm:py-32 px-4 sm:px-6 bg-white">
+    <section className="py-14 sm:py-20 px-4 sm:px-6 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16 space-y-4">
           <motion.div
@@ -650,7 +776,7 @@ function WorkflowSection() {
   );
 }
 
-// â”€â”€â”€ PRODUCT UI MOCK â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── PRODUCT UI MOCK ──────────────────────────────────────────────────────────
 type EditorTab = "Instagram" | "Facebook" | "LinkedIn";
 
 const editorCaptions: Record<EditorTab, string> = {
@@ -674,7 +800,7 @@ function ProductUIMock() {
   const caption = editorCaptions[activeTab];
 
   return (
-    <section className="py-24 sm:py-32 px-4 sm:px-6 bg-white">
+    <section className="py-14 sm:py-20 px-4 sm:px-6 bg-white">
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-16 space-y-4">
           <motion.div
@@ -815,7 +941,7 @@ function ProductUIMock() {
   );
 }
 
-// â”€â”€â”€ RESULTS SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── RESULTS SECTION ─────────────────────────────────────────────────────────
 function ResultsSection() {
   const stats = [
     { val: "10x", label: "faster content creation" },
@@ -842,7 +968,7 @@ function ResultsSection() {
   ];
 
   return (
-    <section className="py-24 sm:py-32 px-4 sm:px-6 bg-muted/30 relative overflow-hidden">
+    <section className="py-14 sm:py-20 px-4 sm:px-6 bg-muted/30 relative overflow-hidden">
       <div className="absolute inset-0 grid-bg opacity-[0.3] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -891,7 +1017,7 @@ function ResultsSection() {
   );
 }
 
-// â”€â”€â”€ PRICING SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── PRICING SECTION ─────────────────────────────────────────────────────────
 function PricingSection() {
   const { openModal } = useBooking();
 
@@ -913,7 +1039,7 @@ function PricingSection() {
   ];
 
   return (
-    <section className="py-24 sm:py-32 px-4 sm:px-6 bg-white">
+    <section className="py-14 sm:py-20 px-4 sm:px-6 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16 space-y-4">
           <motion.div
@@ -1017,12 +1143,12 @@ function PricingSection() {
   );
 }
 
-// â”€â”€â”€ FINAL CTA SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── FINAL CTA SECTION ────────────────────────────────────────────────────────
 function FinalCTASection() {
   const { openModal } = useBooking();
 
   return (
-    <section className="py-24 sm:py-32 px-4 sm:px-6 bg-muted/30 relative overflow-hidden">
+    <section className="py-14 sm:py-20 px-4 sm:px-6 bg-muted/30 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-mesh opacity-60 pointer-events-none" />
       <div className="absolute inset-0 grid-bg opacity-[0.3] pointer-events-none" />
 
@@ -1073,7 +1199,7 @@ function FinalCTASection() {
   );
 }
 
-// â”€â”€â”€ PAGE EXPORT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── PAGE EXPORT ──────────────────────────────────────────────────────────────
 export default function MarketingPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -1084,6 +1210,7 @@ export default function MarketingPage() {
       <MarketingNavbar />
       <HeroSection />
       <LiveOutputSection />
+      <PainPointsSection />
       <FeaturesSection />
       <WorkflowSection />
       <TransactionFlow />
