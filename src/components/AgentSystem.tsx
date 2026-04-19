@@ -108,9 +108,8 @@ function StagingPreview() {
   return (
     <div className="relative rounded-xl overflow-hidden h-full min-h-[180px] select-none">
       <img
-        src="https://images.unsplash.com/photo-1549517045-bc93de075e53?q=75&w=1200&auto=format&fit=crop"
+        src="/Before image.webp"
         alt="Empty room"
-        referrerPolicy="no-referrer"
         loading="lazy"
         decoding="async"
         className="absolute inset-0 w-full h-full object-cover"
@@ -120,9 +119,8 @@ function StagingPreview() {
         style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}
       >
         <img
-          src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=75&w=1200&auto=format&fit=crop"
+          src="/after image.webp"
           alt="Staged room"
-          referrerPolicy="no-referrer"
           loading="lazy"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover"
