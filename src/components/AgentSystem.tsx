@@ -386,7 +386,7 @@ const agents = [
     desc: "Automates disclosures, IABS forms, and compliance documents.",
     bullets: ["Fast document completion", "Accurate form processing", "Simplifies compliance workflows"],
     cta: "Process Documents",
-    nav: "#/ria",
+    nav: "#/transaction",
     Preview: TransactionPreview,
   },
   {
